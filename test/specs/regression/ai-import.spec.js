@@ -2,8 +2,10 @@ import { addFeature, addSeverity } from '../../helpers/allureHelper.js'
 import LoginPage from '../../pageobjects/login.page.js'
 import InvoicePage from '../../pageobjects/invoice.page.js'
 import path from 'path'
+import { fileURLToPath } from 'url'
 
-const fixture = (file) => path.resolve('./test/fixtures', file)
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const fixture = (file) => path.resolve(__dirname, '../../fixtures', file)
 
 describe('REGRESSION — AI-Powered Invoice Import', () => {
 

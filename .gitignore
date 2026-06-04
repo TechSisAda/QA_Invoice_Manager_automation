@@ -5,3 +5,4 @@ allure-report/
 *.log
 .wdio-*
 errorShots/
+test/downloads/

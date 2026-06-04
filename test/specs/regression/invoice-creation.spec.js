@@ -16,7 +16,9 @@ describe('REGRESSION — Invoice Creation Wizard', () => {
     it('REG-INV-001 | Step 1 invoice type dropdown contains Proforma, Quotation, Commercial Invoice', async () => {
         addFeature('E-Invoicing Core'); addSeverity('critical')
         const types = await InvoicePage.getInvoiceTypeOptions()
-        expect(types).toEqual(expect.arrayContaining(['Proforma', 'Quotation', 'Commercial Invoice']))
+        expect(types).toContain('Proforma')
+        expect(types).toContain('Quotation')
+        expect(types).toContain('Commercial Invoice')
     })
 
     it('REG-INV-002 | Quick Add (+) creates new client without leaving the wizard', async () => {

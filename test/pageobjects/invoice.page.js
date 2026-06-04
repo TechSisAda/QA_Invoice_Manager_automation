@@ -176,11 +176,27 @@ class InvoicePage {
     }
 
     async exportAs(format) {
+        // Set Chrome download directory via CDP before clicking export
+        const downloadDir = process.cwd() + '/test/downloads'
+        await browser.cdp('Page', 'setDownloadBehavior', {
+            behavior: 'allow',
+            downloadPath: downloadDir
+        })
         await $(`[data-testid="export-${format.toLowerCase()}"]`).click()
-        return browser.waitUntil(async () => {
-            const downloads = await browser.getDownloads()
-            return downloads[downloads.length - 1]
-        }, { timeout: 10000 })
+
+        // Poll the download directory for the new file (up to 10s)
+        const { readdirSync, existsSync, mkdirSync } = await import('fs')
+        const { join } = await import('path')
+        if (!existsSync(downloadDir)) mkdirSync(downloadDir, { recursive: true })
+
+        let filename
+        await browser.waitUntil(() => {
+            const files = readdirSync(downloadDir).filter(f => !f.endsWith('.crdownload'))
+            if (files.length > 0) { filename = files[files.length - 1]; return true }
+            return false
+        }, { timeout: 10000, interval: 500 })
+
+        return { filename, filepath: join(downloadDir, filename) }
     }
 
     async getStatusSteps() {

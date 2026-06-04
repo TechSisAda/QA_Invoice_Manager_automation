@@ -2,6 +2,9 @@ import { addFeature, addSeverity } from '../../helpers/allureHelper.js'
 import LoginPage from '../../pageobjects/login.page.js'
 import InvoicePage from '../../pageobjects/invoice.page.js'
 import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 describe('E2E — AI Import → Validate → FIRS Submit', () => {
 
@@ -16,7 +19,7 @@ describe('E2E — AI Import → Validate → FIRS Submit', () => {
         await InvoicePage.openImport()
 
         // Upload a scanned invoice image/PDF
-        await InvoicePage.uploadFile(path.resolve('./test/fixtures/scanned-invoice.pdf'))
+        await InvoicePage.uploadFile(path.resolve(__dirname, '../../fixtures/scanned-invoice.pdf'))
         await InvoicePage.enterNLPDescription('Extract all line items and VAT breakdown')
         await InvoicePage.triggerExtraction()
 

@@ -22,7 +22,7 @@ export const config = {
     waitforTimeout: 10000,
     connectionRetryTimeout: 120000,
     connectionRetryCount: 3,
-    services: ['chromedriver'],
+    services: [['chromedriver', { port: 9515 }]],
     framework: 'mocha',
     mochaOpts: {
         ui: 'bdd',
@@ -40,9 +40,9 @@ export const config = {
         }]
     ],
 
-    afterTest(test, context, { error, passed }) {
+    afterTest: async function (test, context, { error, passed }) {
         if (!passed) {
-            browser.takeScreenshot()
+            await browser.takeScreenshot()
         }
     }
 }
