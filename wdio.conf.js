@@ -22,7 +22,10 @@ export const config = {
     waitforTimeout: 10000,
     connectionRetryTimeout: 120000,
     connectionRetryCount: 3,
-    services: [['chromedriver', { port: 9515 }]],
+    services: [['chromedriver', {
+        port: 9515,
+        logFileName: 'wdio-chromedriver.log'
+    }]],
     framework: 'mocha',
     mochaOpts: {
         ui: 'bdd',
