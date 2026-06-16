@@ -4,6 +4,15 @@ import DashboardPage from '../../pageobjects/dashboard.page.js'
 import SettingsPage from '../../pageobjects/settings.page.js'
 import { bentenSettings } from '../../helpers/testData.js'
 
+// ─────────────────────────────────────────────────────────────────────────────
+// REGRESSION: Manage Settings
+//
+// Pre-condition: The instance has already been configured — all business profile
+// and FIRS credential fields are filled. For a brand-new instance with empty
+// fields, run test/specs/e2e/instance-setup.e2e.js FIRST to populate them,
+// then run this suite to verify they are correctly persisted.
+// ─────────────────────────────────────────────────────────────────────────────
+
 describe('REGRESSION — Manage Settings (FIRS Configuration & Business Profile)', () => {
 
     before(async () => {
