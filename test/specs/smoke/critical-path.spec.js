@@ -1,6 +1,7 @@
 import { addFeature, addSeverity } from '../../helpers/allureHelper.js'
 import LandingPage from '../../pageobjects/landing.page.js'
 import SubscriptionsPage from '../../pageobjects/subscriptions.page.js'
+import RegistrationPage from '../../pageobjects/registration.page.js'
 
 describe('SMOKE — InvoiceManager Landing Page Critical Path', () => {
 
@@ -72,5 +73,38 @@ describe('SMOKE — Subscriptions Page Critical Path', () => {
         expect(smeHref).toContain('67a91caf')
         expect(proHref).toContain('062b6808')
         expect(entHref).toContain('6e98ca7b')
+    })
+})
+
+describe('SMOKE — SME Starter Registration Form Critical Path', () => {
+
+    before(async () => {
+        await RegistrationPage.open()
+    })
+
+    it('SM-010 | Registration form page loads with correct heading', async () => {
+        addFeature('Registration'); addSeverity('blocker')
+        await expect(RegistrationPage.pageHeading).toBeDisplayed()
+        await expect(RegistrationPage.pageHeading).toHaveText(/Complete Your Subscription/i)
+    })
+
+    it('SM-011 | Plan summary shows SME Starter FREE', async () => {
+        addFeature('Registration'); addSeverity('blocker')
+        await expect(RegistrationPage.planSummaryCard).toHaveText(/SME Starter/i)
+        await expect(RegistrationPage.planPrice).toHaveText(/FREE/i)
+    })
+
+    it('SM-012 | All four required form fields are present', async () => {
+        addFeature('Registration'); addSeverity('blocker')
+        await expect(RegistrationPage.firstNameInput).toBeDisplayed()
+        await expect(RegistrationPage.lastNameInput).toBeDisplayed()
+        await expect(RegistrationPage.emailInput).toBeDisplayed()
+        await expect(RegistrationPage.phoneInput).toBeDisplayed()
+    })
+
+    it('SM-013 | Subscribe Now button is present', async () => {
+        addFeature('Registration'); addSeverity('blocker')
+        await expect(RegistrationPage.submitBtn).toBeDisplayed()
+        await expect(RegistrationPage.submitBtn).toHaveText(/Subscribe Now/i)
     })
 })
