@@ -2,6 +2,8 @@ import { addFeature, addSeverity } from '../../helpers/allureHelper.js'
 import LandingPage from '../../pageobjects/landing.page.js'
 import SubscriptionsPage from '../../pageobjects/subscriptions.page.js'
 import RegistrationPage from '../../pageobjects/registration.page.js'
+import InstanceLandingPage from '../../pageobjects/instance-landing.page.js'
+import LoginPage from '../../pageobjects/login.page.js'
 
 describe('SMOKE — InvoiceManager Landing Page Critical Path', () => {
 
@@ -106,5 +108,59 @@ describe('SMOKE — SME Starter Registration Form Critical Path', () => {
         addFeature('Registration'); addSeverity('blocker')
         await expect(RegistrationPage.submitBtn).toBeDisplayed()
         await expect(RegistrationPage.submitBtn).toHaveText(/Subscribe Now/i)
+    })
+})
+
+describe('SMOKE — Instance Landing Page (benten.invoicemanager.ng)', () => {
+
+    before(async () => {
+        await InstanceLandingPage.open()
+    })
+
+    it('SM-014 | Instance landing page loads with InvoiceManager title', async () => {
+        addFeature('Instance Landing'); addSeverity('blocker')
+        await expect(browser).toHaveTitle(/InvoiceManager/i)
+    })
+
+    it('SM-015 | Hero shows business name and Login button', async () => {
+        addFeature('Instance Landing'); addSeverity('blocker')
+        await expect(InstanceLandingPage.heroBusinessName).toHaveText(/Ben Ten Science Lab/i)
+        await expect(InstanceLandingPage.heroLoginBtn).toBeDisplayed()
+    })
+
+    it('SM-016 | Nav Login button links to /login on the instance', async () => {
+        addFeature('Instance Landing'); addSeverity('blocker')
+        const href = await InstanceLandingPage.navLoginBtn.getAttribute('href')
+        expect(href).toContain('benten.invoicemanager.ng/login')
+    })
+})
+
+describe('SMOKE — Instance Login Page (benten.invoicemanager.ng/login)', () => {
+
+    before(async () => {
+        await LoginPage.open()
+    })
+
+    it('SM-017 | Login page loads with LOG IN heading', async () => {
+        addFeature('Login'); addSeverity('blocker')
+        await expect(LoginPage.loginHeading).toBeDisplayed()
+        await expect(LoginPage.loginHeading).toHaveText(/LOG IN/i)
+    })
+
+    it('SM-018 | Email and Password fields are present', async () => {
+        addFeature('Login'); addSeverity('blocker')
+        await expect(LoginPage.emailInput).toBeDisplayed()
+        await expect(LoginPage.passwordInput).toBeDisplayed()
+    })
+
+    it('SM-019 | Log In submit button is present', async () => {
+        addFeature('Login'); addSeverity('blocker')
+        await expect(LoginPage.submitBtn).toBeDisplayed()
+        await expect(LoginPage.submitBtn).toHaveText(/Log In/i)
+    })
+
+    it('SM-020 | Forgot Password link is present', async () => {
+        addFeature('Login'); addSeverity('normal')
+        await expect(LoginPage.forgotPasswordLink).toBeDisplayed()
     })
 })

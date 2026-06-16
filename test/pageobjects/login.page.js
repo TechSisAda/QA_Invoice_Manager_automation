@@ -1,18 +1,37 @@
+const INSTANCE_BASE = process.env.INSTANCE_URL || 'https://benten.invoicemanager.ng'
+
 class LoginPage {
-    get loginForm()    { return $('[data-testid="login-form"]') }
-    get emailInput()   { return $('[data-testid="email-input"]') }
-    get passwordInput(){ return $('[data-testid="password-input"]') }
-    get submitButton() { return $('[data-testid="login-submit"]') }
+
+    // ── Header & Navigation ──────────────────────────────────────────────────
+    get header()            { return $('#header') }
+    get navMenu()           { return $('#navmenu') }
+
+    // ── Login Form ────────────────────────────────────────────────────────────
+    get loginHeading()      { return $('h2*=LOG IN') }
+    get form()              { return $('form[action*="login"]') }
+    get emailInput()        { return $('#email') }
+    get passwordInput()     { return $('#password') }
+    get passwordToggleBtn() { return $('button[onclick="togglePassword()"]') }
+    get eyeIcon()           { return $('#eyeIcon') }
+    get orgIdHidden()       { return $('#organization_id') }
+    get submitBtn()         { return $('button[style*="2E5497"]') }
+    get forgotPasswordLink(){ return $('a[href*="password/reset"]') }
+
+    // ── Footer ────────────────────────────────────────────────────────────────
+    get footer()            { return $('#footer') }
+    get footerSitename()    { return $('#footer .sitename') }
+    get footerCopyright()   { return $('#footer .copyright') }
+
+    // ── Actions ───────────────────────────────────────────────────────────────
 
     async open() {
-        await browser.url('/login')
-        await this.loginForm.waitForDisplayed()
+        await browser.url(INSTANCE_BASE + '/login')
     }
 
     async login(email, password) {
         await this.emailInput.setValue(email)
         await this.passwordInput.setValue(password)
-        await this.submitButton.click()
+        await this.submitBtn.click()
     }
 
     async loginAs(email, password = process.env.TEST_PASS) {
@@ -20,13 +39,8 @@ class LoginPage {
         await this.login(email, password)
     }
 
-    async registerNewBusiness({ email, companyName, tin }) {
-        await browser.url('/register')
-        await $('[data-testid="reg-email"]').setValue(email)
-        await $('[data-testid="reg-company"]').setValue(companyName)
-        await $('[data-testid="reg-tin"]').setValue(tin)
-        await $('[data-testid="reg-submit"]').click()
-        await $('[data-testid="dashboard"]').waitForDisplayed({ timeout: 15000 })
+    async togglePasswordVisibility() {
+        await this.passwordToggleBtn.click()
     }
 }
 
