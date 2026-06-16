@@ -10,7 +10,7 @@ class POSPage {
     get loadInvoiceSelect(){ return $('[data-testid="load-local-invoice"]') }
 
     async open() {
-        await browser.url(INSTANCE + '/pos')
+        await browser.url(INSTANCE + '/invoice-manager/start-invoice-checkout')
         await this.catalogGrid.waitForDisplayed()
     }
 

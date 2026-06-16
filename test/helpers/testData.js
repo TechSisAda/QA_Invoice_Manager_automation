@@ -9,9 +9,22 @@ export const urls = {
     complianceBase: process.env.COMPLIANCE_URL || 'https://compliance.invoicemanager.ng',
 
     // Business instance (benten.invoicemanager.ng)
-    instanceBase:   INSTANCE,
-    instanceLogin:  `${INSTANCE}/login`,
-    instanceForgot: `${INSTANCE}/password/reset`,
+    instanceBase:          INSTANCE,
+    instanceLogin:         `${INSTANCE}/login`,
+    instanceForgot:        `${INSTANCE}/password/reset`,
+    instanceDashboard:     `${INSTANCE}/dashboard`,
+    instanceNewInvoice:    `${INSTANCE}/invoice-manager/start-invoice-creation`,
+    instancePOS:           `${INSTANCE}/invoice-manager/start-invoice-checkout`,
+    instanceSalesInvoices: `${INSTANCE}/invoice-manager/sales`,
+    instanceAllInvoices:   `${INSTANCE}/invoice-manager/invoices`,
+    instanceProducts:      `${INSTANCE}/be/inventoryItems`,
+    instanceClients:       `${INSTANCE}/be/clients`,
+    instanceVendors:       `${INSTANCE}/be/vendors`,
+    instanceUsers:         `${INSTANCE}/invoice-manager/manage-users`,
+    instanceFiscalYears:   `${INSTANCE}/be/fiscalYears`,
+    instanceFIRSSettings:  `${INSTANCE}/invoice-manager/firs-settings`,
+    instanceInvoiceDesign: `${INSTANCE}/invoice-manager/manage-design`,
+    instanceProfile:       `${INSTANCE}/fc/profile`,
 }
 
 export const testData = {

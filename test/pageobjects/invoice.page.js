@@ -46,17 +46,17 @@ class InvoicePage {
     get nlpDescriptionField()  { return $('[data-testid="nlp-description"]') }
 
     async openWizard() {
-        await browser.url(INSTANCE + '/invoices/new')
+        await browser.url(INSTANCE + '/invoice-manager/start-invoice-creation')
         await this.wizardStep1.waitForDisplayed()
     }
 
     async openInvoiceList() {
-        await browser.url(INSTANCE + '/invoices')
+        await browser.url(INSTANCE + '/invoice-manager/invoices')
         await this.invoiceTable.waitForDisplayed()
     }
 
     async openImport() {
-        await browser.url(INSTANCE + '/invoices/import')
+        await browser.url(INSTANCE + '/invoice-manager/invoices/import')
     }
 
     async goToStep(n) {
@@ -116,7 +116,7 @@ class InvoicePage {
     }
 
     async openDraft(id) {
-        await browser.url(INSTANCE + `/invoices/draft/${id}`)
+        await browser.url(INSTANCE + `/invoice-manager/invoice/${id}`)
     }
 
     async focusField(name) {
@@ -210,12 +210,12 @@ class InvoicePage {
     }
 
     async getValidatedInvoice() {
-        await browser.url(INSTANCE + '/invoices?status=validated')
+        await browser.url(INSTANCE + '/invoice-manager/invoices?status=validated')
         return this
     }
 
     async getSignedInvoice() {
-        await browser.url(INSTANCE + '/invoices?status=signed')
+        await browser.url(INSTANCE + '/invoice-manager/invoices?status=signed')
         return this
     }
 

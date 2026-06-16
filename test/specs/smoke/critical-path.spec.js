@@ -4,6 +4,7 @@ import SubscriptionsPage from '../../pageobjects/subscriptions.page.js'
 import RegistrationPage from '../../pageobjects/registration.page.js'
 import InstanceLandingPage from '../../pageobjects/instance-landing.page.js'
 import LoginPage from '../../pageobjects/login.page.js'
+import DashboardPage from '../../pageobjects/dashboard.page.js'
 
 describe('SMOKE — InvoiceManager Landing Page Critical Path', () => {
 
@@ -162,5 +163,42 @@ describe('SMOKE — Instance Login Page (benten.invoicemanager.ng/login)', () =>
     it('SM-020 | Forgot Password link is present', async () => {
         addFeature('Login'); addSeverity('normal')
         await expect(LoginPage.forgotPasswordLink).toBeDisplayed()
+    })
+})
+
+describe('SMOKE — Dashboard Critical Path (benten.invoicemanager.ng/dashboard)', () => {
+
+    before(async () => {
+        await LoginPage.open()
+        await LoginPage.login(process.env.TEST_EMAIL, process.env.TEST_PASS)
+        await DashboardPage.open()
+    })
+
+    it('SM-021 | Dashboard loads with correct page title after login', async () => {
+        addFeature('Dashboard'); addSeverity('blocker')
+        await expect(browser).toHaveTitle(/InvoiceManager/i)
+        await expect(browser).toHaveTitle(/Dashboard/i)
+    })
+
+    it('SM-022 | Welcome banner is displayed confirming successful authentication', async () => {
+        addFeature('Dashboard'); addSeverity('blocker')
+        await expect(DashboardPage.welcomeBanner).toBeDisplayed()
+    })
+
+    it('SM-023 | KPI summary cards section renders with at least Total Sales visible', async () => {
+        addFeature('Dashboard'); addSeverity('blocker')
+        await expect(DashboardPage.summaryCardsSection).toBeDisplayed()
+        await expect(DashboardPage.totalSalesValue).toBeDisplayed()
+    })
+
+    it('SM-024 | Sidebar navigation is present and Create New Invoice link is accessible', async () => {
+        addFeature('Dashboard'); addSeverity('critical')
+        await expect(DashboardPage.sidebar).toBeDisplayed()
+        await expect(DashboardPage.navCreateInvoice).toBeDisplayed()
+    })
+
+    it('SM-025 | Logout form exists ensuring user can end session', async () => {
+        addFeature('Dashboard'); addSeverity('blocker')
+        await expect(DashboardPage.logoutForm).toBeExisting()
     })
 })

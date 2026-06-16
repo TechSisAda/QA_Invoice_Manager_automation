@@ -6,7 +6,7 @@ class AdminPage {
     get companySelector() { return $('[data-testid="company-selector"]') }
 
     async openBusinessProfile() {
-        await browser.url(INSTANCE + '/settings/business-profile')
+        await browser.url(INSTANCE + '/invoice-manager/firs-settings')
     }
 
     async fillBusinessProfile({ companyName, tin, vat, logo }) {
@@ -22,7 +22,7 @@ class AdminPage {
     }
 
     async openUserManagement() {
-        await browser.url(INSTANCE + '/settings/users')
+        await browser.url(INSTANCE + '/invoice-manager/manage-users')
     }
 
     async inviteUser(email, role) {
@@ -34,7 +34,7 @@ class AdminPage {
     }
 
     async addCompanyEntity({ name, tin }) {
-        await browser.url(INSTANCE + '/settings/companies')
+        await browser.url(INSTANCE + '/invoice-manager/firs-settings')
         await $('[data-testid="add-company-btn"]').click()
         await $('[data-testid="new-company-name"]').setValue(name)
         await $('[data-testid="new-company-tin"]').setValue(tin)
@@ -42,7 +42,7 @@ class AdminPage {
     }
 
     async addClient({ name, tin }) {
-        await browser.url(INSTANCE + '/clients/new')
+        await browser.url(INSTANCE + '/be/clients')
         await $('[data-testid="client-name"]').setValue(name)
         await $('[data-testid="client-tin"]').setValue(tin)
         await $('[data-testid="client-save"]').click()
@@ -50,7 +50,7 @@ class AdminPage {
     }
 
     async addProduct({ name, price, taxable }) {
-        await browser.url(INSTANCE + '/products/new')
+        await browser.url(INSTANCE + '/be/inventoryItems')
         await $('[data-testid="product-name"]').setValue(name)
         await $('[data-testid="product-price"]').setValue(price)
         if (taxable) await $('[data-testid="product-taxable"]').click()
