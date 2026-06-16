@@ -18,7 +18,7 @@ export const config = {
     }],
     logLevel: 'warn',
     bail: 0,
-    baseUrl: process.env.BASE_URL || 'https://app.invoicemanager.ng',
+    baseUrl: process.env.BASE_URL || 'https://invoicemanager.ng',
     waitforTimeout: 10000,
     connectionRetryTimeout: 120000,
     connectionRetryCount: 3,
