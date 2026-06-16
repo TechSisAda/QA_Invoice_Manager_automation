@@ -6,6 +6,7 @@ import InstanceLandingPage from '../../pageobjects/instance-landing.page.js'
 import LoginPage from '../../pageobjects/login.page.js'
 import DashboardPage from '../../pageobjects/dashboard.page.js'
 import SettingsPage from '../../pageobjects/settings.page.js'
+import FiscalYearsPage from '../../pageobjects/fiscal-years.page.js'
 
 describe('SMOKE — InvoiceManager Landing Page Critical Path', () => {
 
@@ -243,5 +244,46 @@ describe('SMOKE — Manage Settings Critical Path (benten.invoicemanager.ng/invo
         const key = await SettingsPage.firsKeyInput.getValue()
         expect(baseUrl).toContain('http')
         expect(key.trim().length).toBeGreaterThan(0)
+    })
+})
+
+describe('SMOKE — Manage Fiscal Years Critical Path (benten.invoicemanager.ng/be/fiscalYears)', () => {
+
+    before(async () => {
+        await LoginPage.open()
+        await LoginPage.login(process.env.TEST_EMAIL, process.env.TEST_PASS)
+        await FiscalYearsPage.open()
+        await FiscalYearsPage.waitForListLoaded()
+    })
+
+    it('SM-031 | Fiscal Years page loads with correct title after login', async () => {
+        addFeature('Fiscal Years'); addSeverity('blocker')
+        await expect(browser).toHaveTitle(/InvoiceManager/i)
+        await expect(browser).toHaveTitle(/Fiscal Years/i)
+    })
+
+    it('SM-032 | New Fiscal Year button is present and enabled', async () => {
+        addFeature('Fiscal Years'); addSeverity('blocker')
+        await expect(FiscalYearsPage.newFiscalYearBtn).toBeDisplayed()
+        await expect(FiscalYearsPage.newFiscalYearBtn).not.toBeDisabled()
+    })
+
+    it('SM-033 | Card view container is present and list has loaded', async () => {
+        addFeature('Fiscal Years'); addSeverity('blocker')
+        await expect(FiscalYearsPage.cardViewContainer).toBeExisting()
+    })
+
+    it('SM-034 | All three filter buttons (All, Open, Closed) are present', async () => {
+        addFeature('Fiscal Years'); addSeverity('critical')
+        await expect(FiscalYearsPage.filterAllBtn).toBeDisplayed()
+        await expect(FiscalYearsPage.filterOpenBtn).toBeDisplayed()
+        await expect(FiscalYearsPage.filterClosedBtn).toBeDisplayed()
+    })
+
+    it('SM-035 | At least one fiscal year is listed (instance has an active fiscal year)', async () => {
+        addFeature('Fiscal Years'); addSeverity('blocker')
+        const listText = await FiscalYearsPage.cardViewContainer.getText()
+        expect(listText).not.toContain('No results found')
+        expect(listText.trim().length).toBeGreaterThan(0)
     })
 })

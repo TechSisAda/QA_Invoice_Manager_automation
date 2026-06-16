@@ -49,6 +49,14 @@ export const bentenSettings = {
     firsCertKey:    'am9vOXAwYTlGdVExWFlBQmxNeGs1RGZyRmZYZjNYMDFpcG92VTFqZCtMRT0=',
 }
 
+export const bentenFiscalYear = {
+    name:       'FY 2025',
+    status:     'active',
+    isCurrent:  '1',
+    startDate:  '2025-01-01',
+    endDate:    '2025-12-31',
+}
+
 export const testData = {
     validTIN:       '12345678-0001',
     clientTIN:      '87654321-0001',
