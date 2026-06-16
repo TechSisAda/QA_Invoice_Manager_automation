@@ -57,6 +57,28 @@ export const bentenFiscalYear = {
     endDate:    '2025-12-31',
 }
 
+export const bentenProduct = {
+    title:        'Cement Bag',
+    code:         'PROD-001',
+    description:  'High quality cement bag, 50kg',
+    unitPrice:    '5000',
+    quantity:     '100',
+    quantityUom:  'bags',
+    taxApplicable: false,
+    itemType:     'product_item',
+}
+
+export const bentenService = {
+    title:        'Consulting Service',
+    code:         'SVC-001',
+    description:  'Professional consulting service',
+    unitPrice:    '50000',
+    quantity:     '1',
+    quantityUom:  'hours',
+    taxApplicable: true,
+    itemType:     'service_item',
+}
+
 export const testData = {
     validTIN:       '12345678-0001',
     clientTIN:      '87654321-0001',

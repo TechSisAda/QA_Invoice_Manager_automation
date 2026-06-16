@@ -7,6 +7,7 @@ import LoginPage from '../../pageobjects/login.page.js'
 import DashboardPage from '../../pageobjects/dashboard.page.js'
 import SettingsPage from '../../pageobjects/settings.page.js'
 import FiscalYearsPage from '../../pageobjects/fiscal-years.page.js'
+import ProductsPage from '../../pageobjects/products.page.js'
 
 describe('SMOKE — InvoiceManager Landing Page Critical Path', () => {
 
@@ -283,6 +284,48 @@ describe('SMOKE — Manage Fiscal Years Critical Path (benten.invoicemanager.ng/
     it('SM-035 | At least one fiscal year is listed (instance has an active fiscal year)', async () => {
         addFeature('Fiscal Years'); addSeverity('blocker')
         const listText = await FiscalYearsPage.cardViewContainer.getText()
+        expect(listText).not.toContain('No results found')
+        expect(listText.trim().length).toBeGreaterThan(0)
+    })
+})
+
+describe('SMOKE — Products & Services Critical Path (benten.invoicemanager.ng/be/inventoryItems)', () => {
+
+    before(async () => {
+        await LoginPage.open()
+        await LoginPage.login(process.env.TEST_EMAIL, process.env.TEST_PASS)
+        await ProductsPage.open()
+        await ProductsPage.waitForListLoaded()
+    })
+
+    it('SM-036 | Products & Services page loads with correct title after login', async () => {
+        addFeature('Products & Services'); addSeverity('blocker')
+        await expect(browser).toHaveTitle(/InvoiceManager/i)
+        await expect(browser).toHaveTitle(/Products/i)
+    })
+
+    it('SM-037 | New Item button is present and enabled', async () => {
+        addFeature('Products & Services'); addSeverity('blocker')
+        await expect(ProductsPage.newItemBtn).toBeDisplayed()
+        await expect(ProductsPage.newItemBtn).not.toBeDisabled()
+    })
+
+    it('SM-038 | Total Products and Total Services KPI cards are displayed', async () => {
+        addFeature('Products & Services'); addSeverity('blocker')
+        await expect(ProductsPage.totalProductsCard).toBeDisplayed()
+        await expect(ProductsPage.totalServicesCard).toBeDisplayed()
+    })
+
+    it('SM-039 | Filter buttons (All, Products, Services) are present', async () => {
+        addFeature('Products & Services'); addSeverity('critical')
+        await expect(ProductsPage.filterAllBtn).toBeDisplayed()
+        await expect(ProductsPage.filterProductsBtn).toBeDisplayed()
+        await expect(ProductsPage.filterServicesBtn).toBeDisplayed()
+    })
+
+    it('SM-040 | At least one item is listed in the card view', async () => {
+        addFeature('Products & Services'); addSeverity('blocker')
+        const listText = await ProductsPage.cardViewContainer.getText()
         expect(listText).not.toContain('No results found')
         expect(listText.trim().length).toBeGreaterThan(0)
     })
