@@ -2,6 +2,7 @@ import { addFeature, addSeverity } from '../../helpers/allureHelper.js'
 import LoginPage from '../../pageobjects/login.page.js'
 import DashboardPage from '../../pageobjects/dashboard.page.js'
 import SettingsPage from '../../pageobjects/settings.page.js'
+import { bentenSettings } from '../../helpers/testData.js'
 
 describe('REGRESSION — Manage Settings (FIRS Configuration & Business Profile)', () => {
 
@@ -232,53 +233,53 @@ describe('REGRESSION — Manage Settings (FIRS Configuration & Business Profile)
         await expect(SettingsPage.firsPane).toBeDisplayed()
     })
 
-    it('REG-SET-031 | FIRS Base URL field is present and populated', async () => {
+    it('REG-SET-031 | FIRS Base URL field shows the correct FIRS API endpoint', async () => {
         addFeature('Settings'); addSeverity('blocker')
         await expect(SettingsPage.firsBaseUrlInput).toBeDisplayed()
         const val = await SettingsPage.firsBaseUrlInput.getValue()
-        expect(val).toContain('http')
+        expect(val).toBe(bentenSettings.firsBaseUrl)
     })
 
-    it('REG-SET-032 | FIRS Key field is present and populated', async () => {
+    it('REG-SET-032 | FIRS Key field is filled with the correct test credential', async () => {
         addFeature('Settings'); addSeverity('blocker')
         await expect(SettingsPage.firsKeyInput).toBeDisplayed()
         const val = await SettingsPage.firsKeyInput.getValue()
-        expect(val.trim().length).toBeGreaterThan(0)
+        expect(val).toBe(bentenSettings.firsKey)
     })
 
-    it('REG-SET-033 | FIRS Secret Key field is present and non-empty', async () => {
+    it('REG-SET-033 | FIRS Secret Key field is filled with the correct test credential', async () => {
         addFeature('Settings'); addSeverity('blocker')
         await expect(SettingsPage.firsSecretKeyInput).toBeDisplayed()
         const val = await SettingsPage.firsSecretKeyInput.getValue()
-        expect(val.trim().length).toBeGreaterThan(0)
+        expect(val).toBe(bentenSettings.firsSecretKey)
     })
 
-    it('REG-SET-034 | FIRS Business ID field is present and populated', async () => {
+    it('REG-SET-034 | FIRS Business ID field is filled with the correct test credential', async () => {
         addFeature('Settings'); addSeverity('blocker')
         await expect(SettingsPage.firsBusinessIdInput).toBeDisplayed()
         const val = await SettingsPage.firsBusinessIdInput.getValue()
-        expect(val.trim().length).toBeGreaterThan(0)
+        expect(val).toBe(bentenSettings.firsBusinessId)
     })
 
-    it('REG-SET-035 | FIRS IRN Format Code field is present and shows a value', async () => {
-        addFeature('Settings'); addSeverity('critical')
+    it('REG-SET-035 | FIRS IRN Format Code field shows the correct IRN code', async () => {
+        addFeature('Settings'); addSeverity('blocker')
         await expect(SettingsPage.firsIrnCodeInput).toBeDisplayed()
         const val = await SettingsPage.firsIrnCodeInput.getValue()
-        expect(val.trim().length).toBeGreaterThan(0)
+        expect(val).toBe(bentenSettings.firsIrnCode)
     })
 
-    it('REG-SET-036 | FIRS Public Key field is present and contains a base64-like value', async () => {
-        addFeature('Settings'); addSeverity('critical')
+    it('REG-SET-036 | FIRS Public Key field is filled with the correct base64-encoded key', async () => {
+        addFeature('Settings'); addSeverity('blocker')
         await expect(SettingsPage.firsPublicKeyInput).toBeDisplayed()
         const val = await SettingsPage.firsPublicKeyInput.getValue()
-        expect(val.trim().length).toBeGreaterThan(0)
+        expect(val).toBe(bentenSettings.firsPublicKey)
     })
 
-    it('REG-SET-037 | FIRS Certificate Key field is present and non-empty', async () => {
-        addFeature('Settings'); addSeverity('critical')
+    it('REG-SET-037 | FIRS Certificate Key field is filled with the correct test credential', async () => {
+        addFeature('Settings'); addSeverity('blocker')
         await expect(SettingsPage.firsCertKeyInput).toBeDisplayed()
         const val = await SettingsPage.firsCertKeyInput.getValue()
-        expect(val.trim().length).toBeGreaterThan(0)
+        expect(val).toBe(bentenSettings.firsCertKey)
     })
 
     it('REG-SET-038 | All FIRS fields have pencil edit buttons', async () => {
@@ -288,7 +289,7 @@ describe('REGRESSION — Manage Settings (FIRS Configuration & Business Profile)
         }
     })
 
-    it('REG-SET-039 | FIRS Base URL edit modal opens showing a URL value', async () => {
+    it('REG-SET-039 | FIRS Base URL edit modal pre-populates with the stored Base URL', async () => {
         addFeature('Settings'); addSeverity('critical')
         await SettingsPage.openEditModal('firsBaseUrl')
         await browser.waitUntil(
@@ -296,19 +297,43 @@ describe('REGRESSION — Manage Settings (FIRS Configuration & Business Profile)
             { timeout: 5000 }
         )
         const modalVal = await SettingsPage.editModalTextInput.getValue()
-        expect(modalVal).toContain('http')
+        expect(modalVal).toBe(bentenSettings.firsBaseUrl)
         await SettingsPage.closeEditModal()
     })
 
-    it('REG-SET-040 | FIRS IRN Code edit modal opens with correct value', async () => {
-        addFeature('Settings'); addSeverity('normal')
+    it('REG-SET-040 | FIRS IRN Code edit modal pre-populates with the stored IRN code', async () => {
+        addFeature('Settings'); addSeverity('critical')
         await SettingsPage.openEditModal('firsIrnCode')
         await browser.waitUntil(
             async () => await SettingsPage.editModalTextInput.isDisplayed(),
             { timeout: 5000 }
         )
         const modalVal = await SettingsPage.editModalTextInput.getValue()
-        expect(modalVal.trim().length).toBeGreaterThan(0)
+        expect(modalVal).toBe(bentenSettings.firsIrnCode)
+        await SettingsPage.closeEditModal()
+    })
+
+    it('REG-SET-041 | FIRS Key edit modal pre-populates with the stored FIRS Key', async () => {
+        addFeature('Settings'); addSeverity('critical')
+        await SettingsPage.openEditModal('firsKey')
+        await browser.waitUntil(
+            async () => await SettingsPage.editModalTextInput.isDisplayed(),
+            { timeout: 5000 }
+        )
+        const modalVal = await SettingsPage.editModalTextInput.getValue()
+        expect(modalVal).toBe(bentenSettings.firsKey)
+        await SettingsPage.closeEditModal()
+    })
+
+    it('REG-SET-042 | FIRS Business ID edit modal pre-populates with the stored Business ID', async () => {
+        addFeature('Settings'); addSeverity('critical')
+        await SettingsPage.openEditModal('firsBusinessId')
+        await browser.waitUntil(
+            async () => await SettingsPage.editModalTextInput.isDisplayed(),
+            { timeout: 5000 }
+        )
+        const modalVal = await SettingsPage.editModalTextInput.getValue()
+        expect(modalVal).toBe(bentenSettings.firsBusinessId)
         await SettingsPage.closeEditModal()
     })
 })

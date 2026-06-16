@@ -28,6 +28,7 @@ export const urls = {
 }
 
 export const bentenSettings = {
+    // Business profile (Settings tab)
     businessName:   'Ben Ten Science Lab',
     state:          'Anambra',
     tin:            '100000001-0001',
@@ -37,8 +38,15 @@ export const bentenSettings = {
     lga:            'Aguata',
     email:          'benten@mail.com',
     phone:          '008012345654',
-    firsIrnCode:    'E3BC8088',
+
+    // FIRS configuration (FIRS tab) — test credentials for production server
     firsBaseUrl:    'https://eivc-k6z6d.ondigitalocean.app',
+    firsKey:        'f1a1d3f5-9b26-4eba-a3f9-e469659ff7a4',
+    firsSecretKey:  'oXjYCCALglF8EAXbcSzJB2S9th2yhFtmwCUxDhrACPqZd1jvXyoB5hhIJLGKM8iu4FFbgqnVzkMNDSqZxbm2ZF5fsJuOJEHxlrVz',
+    firsBusinessId: '39a94704-8088-490f-b727-a428b01a0a9f-9b26-4eba-a3f9-e469659ff7a4',
+    firsIrnCode:    'E3BC8088',
+    firsPublicKey:  'LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFyU0xpdDRtb1RMbFdjd1A4eEp6RQp3ZTdkRHExdC9kMi9zcXdQTlNVandablFPbklabVh4TXY4QUQxemMxdUErZ3VCc2tpUGdoSXd6ekxWYXJoNk1KCndEdVUxSC95V2FPZE1PTnZOQy9OWERybXB5cE5WUDZyQnV3LzVjSERMdEtoZlJ0YkdFa1JSVVF4MVAxUUJ6REsKVVRpaTRJOXJld29zcVQ4V1dBOE8zRVd5ZHJ5TEg1K3JpVmRUNVBPeU1jcU95YUR2bGRqWG9ZdnBSTHlkcmtDQQpkUWpMdkw0bG00TVNxS05WdGVJR0Y4ZWk0M3Juck5wR3hKTVVGYVMwekt5TzBJZlY0alBCK3ZXN3I1TXdzTjRvCkRnWVR2ME85Q050N3JoNlEvYi9XR3Ewakl3WHJ3c3JIQXE4TXNyUVlGV0JIOHpmejMwOHRWMTlRM1hPTnEyWEMKMHdJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==',
+    firsCertKey:    'am9vOXAwYTlGdVExWFlBQmxNeGs1RGZyRmZYZjNYMDFpcG92VTFqZCtMRT0=',
 }
 
 export const testData = {
