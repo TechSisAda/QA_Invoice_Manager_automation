@@ -1,9 +1,17 @@
+const INSTANCE = process.env.INSTANCE_URL || 'https://benten.invoicemanager.ng'
+
 export const urls = {
-    home:               '/',
-    register:           '/plm/subscriptions',
-    linkTIN:            `${process.env.BASE_URL?.replace('invoicemanager', 'www.invoicemanager')}/ivm/link-tin`,
-    tinRegistration:    `${process.env.COMPLIANCE_URL || 'https://compliance.invoicemanager.ng'}/apply/application/fda7054a-924f-4967-84ac-6a79b1b6b20f`,
-    complianceBase:     process.env.COMPLIANCE_URL || 'https://compliance.invoicemanager.ng',
+    // Main site (invoicemanager.ng)
+    home:           '/',
+    register:       '/plm/subscriptions',
+    smeStarterForm: '/plm/subscriptions/67a91caf-a7d2-4530-97ef-b6bf8327f4bb',
+    linkTIN:        'https://www.invoicemanager.ng/ivm/link-tin',
+    complianceBase: process.env.COMPLIANCE_URL || 'https://compliance.invoicemanager.ng',
+
+    // Business instance (benten.invoicemanager.ng)
+    instanceBase:   INSTANCE,
+    instanceLogin:  `${INSTANCE}/login`,
+    instanceForgot: `${INSTANCE}/password/reset`,
 }
 
 export const testData = {

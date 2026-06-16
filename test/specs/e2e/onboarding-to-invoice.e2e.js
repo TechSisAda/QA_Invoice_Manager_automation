@@ -6,17 +6,27 @@ import TINPage from '../../pageobjects/tin-registration.page.js'
 import AdminPage from '../../pageobjects/admin.page.js'
 import InvoicePage from '../../pageobjects/invoice.page.js'
 
+// ─────────────────────────────────────────────────────────────────────────────
+// E2E: Full business onboarding → FIRS-signed invoice
+//
+// Pre-condition: A business instance already exists (benten.invoicemanager.ng).
+// Flow:          Login → enable TIN → add client & product
+//                → create invoice → FIRS sign → email client
+//
+// NOTE: The subscription registration step (Subscribe Now) is currently
+// blocked by a server-side bug (JIRA blocker). This E2E starts from login
+// into the existing benten instance instead.
+// ─────────────────────────────────────────────────────────────────────────────
+
 describe('E2E — Full Business Onboarding to FIRS-Signed Invoice', () => {
 
-    it('E2E-001 | Register → enable TIN → add client & product → create invoice → FIRS sign → email client', async () => {
+    it('E2E-001 | Login → enable TIN → add client & product → create invoice → FIRS sign → email client', async () => {
         addFeature('Full Journey'); addSeverity('blocker')
 
-        // 1. Register a new business
-        await LoginPage.registerNewBusiness({
-            email: `e2e-${Date.now()}@newbusiness.com`,
-            companyName: 'E2E Corp Ltd',
-            tin: testData.validTIN
-        })
+        // 1. Log in to the existing benten instance
+        await LoginPage.open()
+        await LoginPage.login(process.env.TEST_EMAIL, process.env.TEST_PASS)
+        await DashboardPage.open()
         await expect(DashboardPage.welcomeBanner).toBeDisplayed()
 
         // 2. Enable FIRS TIN

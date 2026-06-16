@@ -1,3 +1,10 @@
+import { fileURLToPath } from 'url'
+import path from 'path'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const fixture = (file) => path.resolve(__dirname, '../../fixtures', file)
+const INSTANCE = process.env.INSTANCE_URL || 'https://benten.invoicemanager.ng'
+
 class InvoicePage {
     // Wizard steps
     get wizardStep1()          { return $('[data-testid="wizard-step-1"]') }
@@ -39,17 +46,17 @@ class InvoicePage {
     get nlpDescriptionField()  { return $('[data-testid="nlp-description"]') }
 
     async openWizard() {
-        await browser.url('/invoices/new')
+        await browser.url(INSTANCE + '/invoices/new')
         await this.wizardStep1.waitForDisplayed()
     }
 
     async openInvoiceList() {
-        await browser.url('/invoices')
+        await browser.url(INSTANCE + '/invoices')
         await this.invoiceTable.waitForDisplayed()
     }
 
     async openImport() {
-        await browser.url('/invoices/import')
+        await browser.url(INSTANCE + '/invoices/import')
     }
 
     async goToStep(n) {
@@ -109,7 +116,7 @@ class InvoicePage {
     }
 
     async openDraft(id) {
-        await browser.url(`/invoices/draft/${id}`)
+        await browser.url(INSTANCE + `/invoices/draft/${id}`)
     }
 
     async focusField(name) {
@@ -124,9 +131,9 @@ class InvoicePage {
         await this.billingCycleSelect.selectByVisibleText(cycle)
     }
 
-    async uploadFile(filePath) {
+    async uploadFile(fileName) {
         const input = await $('[data-testid="file-upload-input"]')
-        await input.addValue(filePath)
+        await input.addValue(fixture(fileName))
     }
 
     async enterNLPDescription(text) {
@@ -176,7 +183,6 @@ class InvoicePage {
     }
 
     async exportAs(format) {
-        // Set Chrome download directory via CDP before clicking export
         const downloadDir = process.cwd() + '/test/downloads'
         await browser.cdp('Page', 'setDownloadBehavior', {
             behavior: 'allow',
@@ -184,7 +190,6 @@ class InvoicePage {
         })
         await $(`[data-testid="export-${format.toLowerCase()}"]`).click()
 
-        // Poll the download directory for the new file (up to 10s)
         const { readdirSync, existsSync, mkdirSync } = await import('fs')
         const { join } = await import('path')
         if (!existsSync(downloadDir)) mkdirSync(downloadDir, { recursive: true })
@@ -205,16 +210,16 @@ class InvoicePage {
     }
 
     async getValidatedInvoice() {
-        await browser.url('/invoices?status=validated')
+        await browser.url(INSTANCE + '/invoices?status=validated')
         return this
     }
 
     async getSignedInvoice() {
-        await browser.url('/invoices?status=signed')
+        await browser.url(INSTANCE + '/invoices?status=signed')
         return this
     }
 
-    async submitInvalidInvoice(data) {
+    async submitInvalidInvoice() {
         await this.openWizard()
         await this.finalizeAndSubmit()
     }

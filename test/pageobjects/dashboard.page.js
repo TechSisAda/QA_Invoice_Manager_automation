@@ -1,3 +1,5 @@
+const INSTANCE = process.env.INSTANCE_URL || 'https://benten.invoicemanager.ng'
+
 class DashboardPage {
     get welcomeBanner()       { return $('[data-testid="dashboard-welcome"]') }
     get totalInvoicesTile()   { return $('[data-testid="tile-total-invoices"]') }
@@ -12,7 +14,7 @@ class DashboardPage {
     get logoutBtn()           { return $('[data-testid="logout"]') }
 
     async open() {
-        await browser.url('/dashboard')
+        await browser.url(INSTANCE + '/dashboard')
         await this.welcomeBanner.waitForDisplayed()
     }
 

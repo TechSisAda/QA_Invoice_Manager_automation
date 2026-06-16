@@ -1,3 +1,5 @@
+const INSTANCE = process.env.INSTANCE_URL || 'https://benten.invoicemanager.ng'
+
 class POSPage {
     get catalogGrid()     { return $('.product-catalog-grid') }
     get searchBar()       { return $('[data-testid="pos-search"]') }
@@ -8,7 +10,7 @@ class POSPage {
     get loadInvoiceSelect(){ return $('[data-testid="load-local-invoice"]') }
 
     async open() {
-        await browser.url('/pos')
+        await browser.url(INSTANCE + '/pos')
         await this.catalogGrid.waitForDisplayed()
     }
 

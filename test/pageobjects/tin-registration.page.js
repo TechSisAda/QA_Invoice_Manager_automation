@@ -1,3 +1,5 @@
+const INSTANCE = process.env.INSTANCE_URL || 'https://benten.invoicemanager.ng'
+
 class TINRegistrationPage {
     get businessInfoTab()        { return $('[data-testid="tab-business-info"]') }
     get finalPreviewTab()        { return $('[data-testid="tab-final-preview"]') }
@@ -19,12 +21,12 @@ class TINRegistrationPage {
     get enablementSubmitBtn()    { return $('[data-testid="enablement-submit"]') }
 
     async open() {
-        await browser.url('/register/tin')
+        await browser.url(INSTANCE + '/register/tin')
         await this.businessInfoTab.waitForDisplayed()
     }
 
     async openEnablement() {
-        await browser.url('/settings/firs-enablement')
+        await browser.url(INSTANCE + '/settings/firs-enablement')
     }
 
     async selectBusinessType(type) {
@@ -33,12 +35,12 @@ class TINRegistrationPage {
 
     async selectState(state) {
         await this.stateDropdown.selectByVisibleText(state)
-        await browser.pause(500) // wait for city to populate
+        await browser.pause(500)
     }
 
     async selectCity(city) {
         await this.cityDropdown.selectByVisibleText(city)
-        await browser.pause(500) // wait for LGA to populate
+        await browser.pause(500)
     }
 
     async fillPartialForm({ firstName, lastName }) {
