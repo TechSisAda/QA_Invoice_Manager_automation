@@ -1,5 +1,6 @@
 import { addFeature, addSeverity } from '../../helpers/allureHelper.js'
 import LandingPage from '../../pageobjects/landing.page.js'
+import SubscriptionsPage from '../../pageobjects/subscriptions.page.js'
 
 describe('SMOKE — InvoiceManager Landing Page Critical Path', () => {
 
@@ -41,5 +42,35 @@ describe('SMOKE — InvoiceManager Landing Page Critical Path', () => {
         await LandingPage.footer.scrollIntoView()
         await expect(LandingPage.footer).toBeDisplayed()
         await expect(LandingPage.footerSitename).toHaveText(/InvoiceManager/i)
+    })
+})
+
+describe('SMOKE — Subscriptions Page Critical Path', () => {
+
+    before(async () => {
+        await SubscriptionsPage.open()
+    })
+
+    it('SM-007 | Subscriptions page loads with correct title', async () => {
+        addFeature('Subscriptions'); addSeverity('blocker')
+        await expect(browser).toHaveTitle(/InvoiceManager/)
+        await expect(browser).toHaveTitle(/Subscriptions/i)
+    })
+
+    it('SM-008 | Three plan cards are displayed (SME Starter, Business Pro, Enterprise)', async () => {
+        addFeature('Subscriptions'); addSeverity('blocker')
+        await expect(SubscriptionsPage.smeStarterName).toBeDisplayed()
+        await expect(SubscriptionsPage.businessProName).toBeDisplayed()
+        await expect(SubscriptionsPage.enterpriseName).toBeDisplayed()
+    })
+
+    it('SM-009 | All three START NOW CTAs are present and linked correctly', async () => {
+        addFeature('Subscriptions'); addSeverity('critical')
+        const smeHref  = await SubscriptionsPage.smeStarterCTA.getAttribute('href')
+        const proHref  = await SubscriptionsPage.businessProCTA.getAttribute('href')
+        const entHref  = await SubscriptionsPage.enterpriseCTA.getAttribute('href')
+        expect(smeHref).toContain('67a91caf')
+        expect(proHref).toContain('062b6808')
+        expect(entHref).toContain('6e98ca7b')
     })
 })
