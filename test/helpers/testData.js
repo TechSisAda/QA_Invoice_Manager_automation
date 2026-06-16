@@ -27,6 +27,20 @@ export const urls = {
     instanceProfile:       `${INSTANCE}/fc/profile`,
 }
 
+export const bentenSettings = {
+    businessName:   'Ben Ten Science Lab',
+    state:          'Anambra',
+    tin:            '100000001-0001',
+    invoicePrefix:  'INV',
+    address:        'Anambra Streets',
+    city:           'Capital City',
+    lga:            'Aguata',
+    email:          'benten@mail.com',
+    phone:          '008012345654',
+    firsIrnCode:    'E3BC8088',
+    firsBaseUrl:    'https://eivc-k6z6d.ondigitalocean.app',
+}
+
 export const testData = {
     validTIN:       '12345678-0001',
     clientTIN:      '87654321-0001',

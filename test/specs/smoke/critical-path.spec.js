@@ -5,6 +5,7 @@ import RegistrationPage from '../../pageobjects/registration.page.js'
 import InstanceLandingPage from '../../pageobjects/instance-landing.page.js'
 import LoginPage from '../../pageobjects/login.page.js'
 import DashboardPage from '../../pageobjects/dashboard.page.js'
+import SettingsPage from '../../pageobjects/settings.page.js'
 
 describe('SMOKE — InvoiceManager Landing Page Critical Path', () => {
 
@@ -200,5 +201,47 @@ describe('SMOKE — Dashboard Critical Path (benten.invoicemanager.ng/dashboard)
     it('SM-025 | Logout form exists ensuring user can end session', async () => {
         addFeature('Dashboard'); addSeverity('blocker')
         await expect(DashboardPage.logoutForm).toBeExisting()
+    })
+})
+
+describe('SMOKE — Manage Settings Critical Path (benten.invoicemanager.ng/invoice-manager/firs-settings)', () => {
+
+    before(async () => {
+        await LoginPage.open()
+        await LoginPage.login(process.env.TEST_EMAIL, process.env.TEST_PASS)
+        await SettingsPage.open()
+    })
+
+    it('SM-026 | Settings page loads after login with correct title', async () => {
+        addFeature('Settings'); addSeverity('blocker')
+        await expect(browser).toHaveTitle(/InvoiceManager/i)
+        await expect(browser).toHaveTitle(/Settings/i)
+    })
+
+    it('SM-027 | Settings tab is active and business name is visible', async () => {
+        addFeature('Settings'); addSeverity('blocker')
+        await expect(SettingsPage.settingsPane).toBeDisplayed()
+        await expect(SettingsPage.businessNameInput).toBeDisplayed()
+    })
+
+    it('SM-028 | FIRS TIN field is populated (prerequisite for invoice signing)', async () => {
+        addFeature('Settings'); addSeverity('blocker')
+        const tin = await SettingsPage.tinInput.getValue()
+        expect(tin.trim().length).toBeGreaterThan(0)
+    })
+
+    it('SM-029 | FIRS tab is present and opens without error', async () => {
+        addFeature('Settings'); addSeverity('blocker')
+        await SettingsPage.clickFIRSTab()
+        await expect(SettingsPage.firsPane).toBeDisplayed()
+        await expect(SettingsPage.firsBaseUrlInput).toBeDisplayed()
+    })
+
+    it('SM-030 | FIRS Base URL and FIRS Key are both populated', async () => {
+        addFeature('Settings'); addSeverity('blocker')
+        const baseUrl = await SettingsPage.firsBaseUrlInput.getValue()
+        const key = await SettingsPage.firsKeyInput.getValue()
+        expect(baseUrl).toContain('http')
+        expect(key.trim().length).toBeGreaterThan(0)
     })
 })
