@@ -2,9 +2,9 @@ name: InvoiceManager Test Suite
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, master, develop]
   pull_request:
-    branches: [main]
+    branches: [main, master]
   schedule:
     - cron: '0 1 * * *'   # nightly at 01:00 UTC
 
@@ -23,6 +23,7 @@ jobs:
         run: npm run test:smoke
         env:
           BASE_URL: ${{ secrets.STAGING_URL }}
+          INSTANCE_URL: ${{ secrets.STAGING_URL }}
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASS: ${{ secrets.TEST_PASS }}
           HEADLESS: 'true'
@@ -39,6 +40,7 @@ jobs:
     name: Regression Tests
     runs-on: ubuntu-latest
     needs: smoke
+    if: always()
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -50,6 +52,7 @@ jobs:
         run: npm run test:regression
         env:
           BASE_URL: ${{ secrets.STAGING_URL }}
+          INSTANCE_URL: ${{ secrets.STAGING_URL }}
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASS: ${{ secrets.TEST_PASS }}
           HEADLESS: 'true'
@@ -77,6 +80,7 @@ jobs:
         run: node agent/test-runner-agent.js "Run the e2e tests and give me a full report"
         env:
           BASE_URL: ${{ secrets.STAGING_URL }}
+          INSTANCE_URL: ${{ secrets.STAGING_URL }}
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASS: ${{ secrets.TEST_PASS }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
