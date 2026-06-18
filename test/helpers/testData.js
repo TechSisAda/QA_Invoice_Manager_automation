@@ -79,6 +79,21 @@ export const bentenService = {
     itemType:     'service_item',
 }
 
+export const bentenClient = {
+    name:          'Acme Nigeria Ltd',
+    shortName:     'Acme',
+    email:         'acme@acme.ng',
+    website:       'https://acme.ng',
+    firsTaxId:     '12345678-0001',
+    cacRcNumber:   'RC-123456',
+    addressStreet: '14 Industrial Layout',
+    telephone:     '08012345678',
+    addressTown:   'Onitsha',
+    addressState:  'NG-AN',
+    lgaCode:       'Onitsha North',
+    postalCode:    '435101',
+}
+
 export const testData = {
     validTIN:       '12345678-0001',
     clientTIN:      '87654321-0001',

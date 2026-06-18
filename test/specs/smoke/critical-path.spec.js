@@ -8,6 +8,8 @@ import DashboardPage from '../../pageobjects/dashboard.page.js'
 import SettingsPage from '../../pageobjects/settings.page.js'
 import FiscalYearsPage from '../../pageobjects/fiscal-years.page.js'
 import ProductsPage from '../../pageobjects/products.page.js'
+import ClientsPage from '../../pageobjects/clients.page.js'
+import { bentenClient } from '../../helpers/testData.js'
 
 describe('SMOKE — InvoiceManager Landing Page Critical Path', () => {
 
@@ -326,6 +328,46 @@ describe('SMOKE — Products & Services Critical Path (benten.invoicemanager.ng/
     it('SM-040 | At least one item is listed in the card view', async () => {
         addFeature('Products & Services'); addSeverity('blocker')
         const listText = await ProductsPage.cardViewContainer.getText()
+        expect(listText).not.toContain('No results found')
+        expect(listText.trim().length).toBeGreaterThan(0)
+    })
+})
+
+describe('SMOKE — Clients Critical Path (benten.invoicemanager.ng/be/clients)', () => {
+
+    before(async () => {
+        await LoginPage.open()
+        await LoginPage.login(process.env.TEST_EMAIL, process.env.TEST_PASS)
+        await ClientsPage.open()
+        await ClientsPage.waitForListLoaded()
+    })
+
+    it('SM-041 | Client Management page loads with correct title after login', async () => {
+        addFeature('Clients'); addSeverity('blocker')
+        await expect(browser).toHaveTitle(/InvoiceManager/i)
+        await expect(browser).toHaveTitle(/Client/i)
+    })
+
+    it('SM-042 | New Client button is present and enabled', async () => {
+        addFeature('Clients'); addSeverity('blocker')
+        await expect(ClientsPage.newClientBtn).toBeDisplayed()
+        await expect(ClientsPage.newClientBtn).not.toBeDisabled()
+    })
+
+    it('SM-043 | Search input and filter button are present', async () => {
+        addFeature('Clients'); addSeverity('critical')
+        await expect(ClientsPage.searchInput).toBeDisplayed()
+        await expect(ClientsPage.filterBtn).toBeDisplayed()
+    })
+
+    it('SM-044 | Card view container is present and list has loaded', async () => {
+        addFeature('Clients'); addSeverity('blocker')
+        await expect(ClientsPage.cardViewContainer).toBeExisting()
+    })
+
+    it('SM-045 | At least one client is listed (instance has a seeded client)', async () => {
+        addFeature('Clients'); addSeverity('blocker')
+        const listText = await ClientsPage.cardViewContainer.getText()
         expect(listText).not.toContain('No results found')
         expect(listText.trim().length).toBeGreaterThan(0)
     })
