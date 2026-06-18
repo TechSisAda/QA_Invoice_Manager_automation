@@ -123,6 +123,21 @@ class ProductsPage {
         await this.newItemBtn.waitForDisplayed({ timeout: 20000 })
         await this.waitForListLoaded()
     }
+
+    async confirmSwal() {
+        const confirmBtn = await $('.sweet-alert button.confirm')
+        await confirmBtn.waitForDisplayed({ timeout: 5000 })
+        await confirmBtn.click()
+    }
+
+    async deleteFirstItem() {
+        await this.firstDeleteBtn.click()
+        await this.confirmSwal()
+        // Second swal ("Deleted successfully") — confirm it too then page reloads
+        await this.confirmSwal()
+        await this.newItemBtn.waitForDisplayed({ timeout: 20000 })
+        await this.waitForListLoaded()
+    }
 }
 
 export default new ProductsPage()

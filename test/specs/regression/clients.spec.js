@@ -1,7 +1,7 @@
 import { addFeature, addSeverity } from '../../helpers/allureHelper.js'
 import LoginPage from '../../pageobjects/login.page.js'
 import ClientsPage from '../../pageobjects/clients.page.js'
-import { bentenClient } from '../../helpers/testData.js'
+import { bentenClient, regClient } from '../../helpers/testData.js'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // REGRESSION — Clients
@@ -380,5 +380,38 @@ describe('REGRESSION — Clients', () => {
         addFeature('Clients'); addSeverity('normal')
         const text = await ClientsPage.infoPanelCard.getText()
         expect(text.toLowerCase()).toMatch(/client/i)
+    })
+
+    // ── Create → Verify → Delete Cycle ────────────────────────────────────────
+
+    it('REG-CLT-053 | Can create a regression-only client (REG Test Corp)', async () => {
+        addFeature('Clients'); addSeverity('blocker')
+        await ClientsPage.createClient(regClient)
+        await expect(ClientsPage.newClientBtn).toBeDisplayed()
+    })
+
+    it('REG-CLT-054 | Newly created regression client appears in the card view', async () => {
+        addFeature('Clients'); addSeverity('blocker')
+        await ClientsPage.searchInput.setValue(regClient.name)
+        await ClientsPage.searchBtn.click()
+        await ClientsPage.waitForListLoaded()
+        const listText = await ClientsPage.cardViewContainer.getText()
+        expect(listText).toContain(regClient.name)
+    })
+
+    it('REG-CLT-055 | Can delete the regression client — swal confirm dialog appears and is accepted', async () => {
+        addFeature('Clients'); addSeverity('blocker')
+        // firstDeleteBtn targets the only result currently shown (filtered to regClient)
+        await ClientsPage.deleteFirstClient()
+        await expect(ClientsPage.newClientBtn).toBeDisplayed()
+    })
+
+    it('REG-CLT-056 | Deleted regression client no longer appears in the card view', async () => {
+        addFeature('Clients'); addSeverity('blocker')
+        await ClientsPage.searchInput.setValue(regClient.name)
+        await ClientsPage.searchBtn.click()
+        await ClientsPage.waitForListLoaded()
+        const listText = await ClientsPage.cardViewContainer.getText()
+        expect(listText).toContain('No results found')
     })
 })

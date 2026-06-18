@@ -79,6 +79,25 @@ export const bentenService = {
     itemType:     'service_item',
 }
 
+export const regProduct = {
+    title:        'REG Test Widget',
+    code:         'REG-001',
+    description:  'Regression-only item — created and deleted by the suite',
+    unitPrice:    '999',
+    quantity:     '10',
+    quantityUom:  'nos',
+    taxApplicable: false,
+    itemType:     'product_item',
+}
+
+export const regClient = {
+    name:          'REG Test Corp',
+    shortName:     'RegTest',
+    email:         'reg-test@regtest.ng',
+    firsTaxId:     '99999999-0001',
+    cacRcNumber:   'RC-999999',
+}
+
 export const bentenClient = {
     name:          'Acme Nigeria Ltd',
     shortName:     'Acme',

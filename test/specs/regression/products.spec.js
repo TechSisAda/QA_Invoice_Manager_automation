@@ -1,7 +1,7 @@
 import { addFeature, addSeverity } from '../../helpers/allureHelper.js'
 import LoginPage from '../../pageobjects/login.page.js'
 import ProductsPage from '../../pageobjects/products.page.js'
-import { bentenProduct, bentenService } from '../../helpers/testData.js'
+import { bentenProduct, bentenService, regProduct } from '../../helpers/testData.js'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // REGRESSION — Products & Services
@@ -322,5 +322,38 @@ describe('REGRESSION — Products & Services', () => {
         addFeature('Products & Services'); addSeverity('normal')
         await expect(ProductsPage.infoPanelCard).toBeDisplayed()
         await expect(ProductsPage.infoPanelCard).toHaveText(/More Information/i)
+    })
+
+    // ── Create → Verify → Delete Cycle ────────────────────────────────────────
+
+    it('REG-PROD-046 | Can create a regression-only item (REG Test Widget)', async () => {
+        addFeature('Products & Services'); addSeverity('blocker')
+        await ProductsPage.createItem(regProduct)
+        await expect(ProductsPage.newItemBtn).toBeDisplayed()
+    })
+
+    it('REG-PROD-047 | Newly created regression item appears in the card view', async () => {
+        addFeature('Products & Services'); addSeverity('blocker')
+        await ProductsPage.searchInput.setValue(regProduct.title)
+        await ProductsPage.searchBtn.click()
+        await ProductsPage.waitForListLoaded()
+        const listText = await ProductsPage.cardViewContainer.getText()
+        expect(listText).toContain(regProduct.title)
+    })
+
+    it('REG-PROD-048 | Can delete the regression item — swal confirm dialog appears and is accepted', async () => {
+        addFeature('Products & Services'); addSeverity('blocker')
+        // firstDeleteBtn targets the only result currently shown (filtered to regProduct)
+        await ProductsPage.deleteFirstItem()
+        await expect(ProductsPage.newItemBtn).toBeDisplayed()
+    })
+
+    it('REG-PROD-049 | Deleted regression item no longer appears in the card view', async () => {
+        addFeature('Products & Services'); addSeverity('blocker')
+        await ProductsPage.searchInput.setValue(regProduct.title)
+        await ProductsPage.searchBtn.click()
+        await ProductsPage.waitForListLoaded()
+        const listText = await ProductsPage.cardViewContainer.getText()
+        expect(listText).toContain('No results found')
     })
 })
