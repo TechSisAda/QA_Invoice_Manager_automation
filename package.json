@@ -4,9 +4,9 @@
   "description": "WebdriverIO test automation suite for InvoiceManager — smoke, regression, and e2e tests",
   "type": "module",
   "scripts": {
-    "test:smoke":       "wdio wdio.conf.js --spec test/specs/smoke",
-    "test:regression":  "wdio wdio.conf.js --spec test/specs/regression",
-    "test:e2e":         "wdio wdio.conf.js --spec test/specs/e2e",
+    "test:smoke":       "wdio wdio.conf.js --spec \"test/specs/smoke/**/*.js\"",
+    "test:regression":  "wdio wdio.conf.js --spec \"test/specs/regression/**/*.js\"",
+    "test:e2e":         "wdio wdio.conf.js --spec \"test/specs/e2e/**/*.js\"",
     "test:all":         "wdio wdio.conf.js",
     "report:generate":  "allure generate allure-results --clean -o allure-report",
     "report:open":      "allure open allure-report",
