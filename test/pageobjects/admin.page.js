@@ -22,7 +22,7 @@ class AdminPage {
     }
 
     async openUserManagement() {
-        await browser.url(INSTANCE + '/invoice-manager/manage-users')
+         await browser.url(INSTANCE + '/invoice-manager/manage-users')
     }
 
     async inviteUser(email, role) {
