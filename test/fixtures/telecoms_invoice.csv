@@ -1,0 +1,28 @@
+TELECOMS ENTERPRISE – INVOICE
+
+Invoice No,INV-2026-0047
+Issue Date,"March 24, 2026"
+Due Date,"April 23, 2026"
+Payment Terms,Net 30
+Sales Rep,Adaeze Nwosu
+
+Bill To
+Company,Acme Tech Solutions Ltd.
+Address,"22 Marina Street, Lagos Island, Lagos, Nigeria"
+Contact,Mr. Chukwuemeka Obi
+Email,c.obi@acmetechng.com
+
+#,Description,Qty,Unit Price ($),Total ($)
+1,Samsung Galaxy S25 Ultra (256GB),5,1299.99,6499.95
+2,Apple iPhone 16 Pro Max (512GB),3,1499.00,4497.00
+3,Sony WH-1000XM6 Wireless Headphones,10,349.99,3499.90
+4,iPad Pro 13-inch M4 (128GB WiFi),4,1099.00,4396.00
+5,DJI Mini 4 Pro Drone,2,759.00,1518.00
+6,"Apple Watch Series 10 (GPS, 46mm)",6,429.00,2574.00
+
+,,,Subtotal,"$22,984.85"
+,,,Tax (7.5% VAT),"$1,723.86"
+,,,Shipping,$250.00
+,,,TOTAL DUE,"$24,958.71"
+
+Payment Bank,Guaranty Trust Bank (GTBank),Account Name,Telecoms Enterprise Ltd,Account No,0123456789
