@@ -19,7 +19,7 @@ describe('E2E — AI Import → Validate → FIRS Submit', () => {
         await InvoicePage.openImport()
 
         // Upload a scanned invoice image/PDF
-        await InvoicePage.uploadFile(path.resolve(__dirname, '../../fixtures/scanned-invoice.pdf'))
+        await InvoicePage.uploadFile(path.resolve(__dirname, '../../fixtures/telecoms_invoice.pdf'))
         await InvoicePage.enterNLPDescription('Extract all line items and VAT breakdown')
         await InvoicePage.triggerExtraction()
 

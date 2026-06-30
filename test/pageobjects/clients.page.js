@@ -1,7 +1,7 @@
 const INSTANCE = process.env.INSTANCE_URL || 'https://benten.invoicemanager.ng'
 
-// Card-view component prefix used in all dynamic element IDs
-const CDV = 'cdv_6a33ddebae090-Hasob_BizEngine_Models_Client'
+// The cdv_* prefix changes between deployments; anchor selectors to the stable model/id suffix.
+const CLIENT_CDV = 'Hasob_BizEngine_Models_Client'
 
 class ClientsPage {
 
@@ -14,20 +14,20 @@ class ClientsPage {
     get newClientBtn()          { return $('#btn-new-mdl-client-modal') }
 
     // ── List / Card view ──────────────────────────────────────────────────────
-    get searchInput()           { return $(`#${CDV}-txt-search`) }
-    get searchBtn()             { return $(`#${CDV}-btn-search`) }
-    get filterAllBtn()          { return $(`.${CDV}-grp[data-val="All"]`) }
-    get cardViewContainer()     { return $(`#${CDV}-div-card-view`) }
-    get listSpinner()           { return $(`#spinner-${CDV}`) }
-    get pagination()            { return $(`#${CDV}-pagination`) }
-    get paginationLimitBtn()    { return $(`#btn-${CDV}-pagination`) }
+    get searchInput()           { return $(`[id$="-${CLIENT_CDV}-txt-search"]`) }
+    get searchBtn()             { return $(`[id$="-${CLIENT_CDV}-btn-search"]`) }
+    get filterAllBtn()          { return $(`[class*="-${CLIENT_CDV}-grp"][data-val="All"]`) }
+    get cardViewContainer()     { return $(`[id$="-${CLIENT_CDV}-div-card-view"]`) }
+    get listSpinner()           { return $(`[id^="spinner-cdv_"][id$="-${CLIENT_CDV}"]`) }
+    get pagination()            { return $(`[id$="-${CLIENT_CDV}-pagination"]`) }
+    get paginationLimitBtn()    { return $(`[id^="btn-cdv_"][id$="-${CLIENT_CDV}-pagination"]`) }
 
     // ── Filter modal ──────────────────────────────────────────────────────────
-    get filterBtn()             { return $(`.${CDV}-btn-filter`) }
-    get filterModal()           { return $(`#mdl-${CDV}-filter-modal`) }
-    get stateFilterSelect()     { return $(`#sel-filter-${CDV}-address_state`) }
-    get applyFilterBtn()        { return $(`#btn-save-mdl-${CDV}-filter-modal`) }
-    get resetFilterBtn()        { return $(`#btn-reset-mdl-${CDV}-filter-modal`) }
+    get filterBtn()             { return $(`[class*="-${CLIENT_CDV}-btn-filter"]`) }
+    get filterModal()           { return $(`[id^="mdl-cdv_"][id$="-${CLIENT_CDV}-filter-modal"]`) }
+    get stateFilterSelect()     { return $(`[id^="sel-filter-cdv_"][id$="-${CLIENT_CDV}-address_state"]`) }
+    get applyFilterBtn()        { return $(`[id^="btn-save-mdl-cdv_"][id$="-${CLIENT_CDV}-filter-modal"]`) }
+    get resetFilterBtn()        { return $(`[id^="btn-reset-mdl-cdv_"][id$="-${CLIENT_CDV}-filter-modal"]`) }
 
     // Row-level action buttons (rendered inside the dynamically loaded card HTML)
     get firstViewBtn()          { return $('.btn-show-mdl-client-modal') }
@@ -83,6 +83,7 @@ class ClientsPage {
             async () => !(await this.listSpinner.isDisplayed()),
             { timeout: 15000, interval: 300 }
         )
+        await this.cardViewContainer.waitForExist({ timeout: 15000 })
     }
 
     async openNewModal() {
@@ -126,6 +127,12 @@ class ClientsPage {
         // Save triggers a swal dialog then reloads on success
         await this.newClientBtn.waitForDisplayed({ timeout: 20000 })
         await this.waitForListLoaded()
+    }
+
+    async getLgaOptionTexts() {
+        return browser.execute((select) => {
+            return Array.from(select.options).map(option => option.textContent.trim())
+        }, await this.lgaCodeSelect)
     }
 
     async confirmSwal() {

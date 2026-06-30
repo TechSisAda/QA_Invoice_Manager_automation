@@ -1,7 +1,7 @@
 const INSTANCE = process.env.INSTANCE_URL || 'https://benten.invoicemanager.ng'
 
 // Card-view component prefix used in all dynamic element IDs
-const CDV = 'cdv_6a316c0668d30-Hasob_BizEngine_Models_FiscalYear'
+const CDV = 'Hasob_BizEngine_Models_FiscalYear'
 
 class FiscalYearsPage {
 

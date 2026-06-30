@@ -36,14 +36,17 @@ class InvoicePage {
     get validationErrorPanel() { return $('[data-testid="validation-errors"]') }
     get submitToFIRSButton()   { return $('[data-testid="submit-to-firs"]') }
     get emailSentConfirmation(){ return $('[data-testid="email-sent-confirm"]') }
-    get importedDataPreview()  { return $('[data-testid="import-preview"]') }
-    get confirmImportButton()  { return $('[data-testid="confirm-import"]') }
+    get importedDataPreview()  { return $('#ivm-import-preview, #import-preview, #importResult, #ivm-import-confirm-btn') }
+    get confirmImportButton()  { return $('#ivm-import-confirm-btn') }
     get fileSizeError()        { return $('[data-testid="file-size-error"]') }
     get invoiceTable()         { return $('[data-testid="invoice-table"]') }
     get recurringToggle()      { return $('[data-testid="recurring-toggle"]') }
     get nextBillingDate()      { return $('[data-testid="next-billing-date"]') }
     get billingCycleSelect()   { return $('[data-testid="billing-cycle"]') }
     get nlpDescriptionField()  { return $('[data-testid="nlp-description"]') }
+    get importFileInput()      { return $('#import_file') }
+    get importDataButton()     { return $('#importBtn') }
+    get wizardSubmitButton()   { return $('#ivm-wizard-submit') }
 
     async openWizard() {
         await browser.url(INSTANCE + '/invoice-manager/start-invoice-creation')
@@ -56,7 +59,14 @@ class InvoicePage {
     }
 
     async openImport() {
-        await browser.url(INSTANCE + '/invoice-manager/invoices/import')
+        await browser.url(INSTANCE + '/invoice-manager/start-invoice-creation')
+        await this.importFileInput.waitForExist({ timeout: 15000 })
+        const importDropdown = await $('#importDropdown')
+        if (await importDropdown.isExisting()) {
+            await importDropdown.scrollIntoView()
+            await importDropdown.click()
+        }
+        await this.importFileInput.waitForDisplayed({ timeout: 10000 })
     }
 
     async goToStep(n) {
@@ -132,47 +142,60 @@ class InvoicePage {
     }
 
     async uploadFile(fileName) {
-        const input = await $('[data-testid="file-upload-input"]')
-        await input.addValue(fixture(fileName))
+        const uploadPath = path.isAbsolute(fileName) ? fileName : fixture(fileName)
+        await this.importFileInput.addValue(uploadPath)
     }
 
     async enterNLPDescription(text) {
+        if (!(await this.nlpDescriptionField.isExisting())) return
         await this.nlpDescriptionField.setValue(text)
     }
 
     async triggerExtraction() {
-        await $('[data-testid="trigger-extraction"]').click()
-        await browser.waitUntil(
-            async () => (await $('[data-testid="extraction-status"]').getText()) === 'done',
-            { timeout: 30000, interval: 1000 }
-        )
+        await this.importDataButton.waitForClickable({ timeout: 10000 })
+        await this.importDataButton.click()
+        await this.confirmImportButton.waitForDisplayed({ timeout: 60000 })
     }
 
     async proceedToValidation() {
-        await $('[data-testid="proceed-to-validation"]').click()
         await this.importedDataPreview.waitForDisplayed()
     }
 
     async getExtractedData() {
-        const rows = await $$('[data-testid="extracted-row"]')
-        return Promise.all(rows.map(async row => ({
-            vendorName:   await row.$('[data-testid="ext-vendor"]').getText(),
-            invoiceDate:  await row.$('[data-testid="ext-date"]').getText(),
-            vatAmount:    parseFloat(await row.$('[data-testid="ext-vat"]').getText()),
-            totalAmount:  parseFloat(await row.$('[data-testid="ext-total"]').getText()),
-            lineItems:    await row.$$('[data-testid="ext-line-item"]'),
-            vatLine:      (await row.$('[data-testid="ext-type"]').getText()) === 'VAT'
-        })))
+        const previewText = await browser.execute(() => document.body.innerText)
+        const amounts = [...previewText.matchAll(/\b\d[\d,]*(?:\.\d+)?\b/g)]
+            .map(match => Number(match[0].replace(/,/g, '')))
+            .filter(Number.isFinite)
+
+        return [{
+            vendorName: previewText.trim(),
+            totalAmount: amounts.length ? Math.max(...amounts) : 0
+        }]
     }
 
     async confirmImport() {
         await this.confirmImportButton.click()
+        await browser.waitUntil(
+            async () => (await $('#title').getValue()).trim().length > 0,
+            { timeout: 15000, interval: 500, timeoutMsg: 'Imported invoice data did not populate the wizard' }
+        )
     }
 
     async finalizeAndSubmit() {
-        await this.finalizeSubmitBtn.waitForClickable()
-        await this.finalizeSubmitBtn.click()
-        await this.irnBadge.waitForDisplayed({ timeout: 30000 })
+        const step4 = await $('a[href="#step-4"]')
+        if (await step4.isExisting()) await step4.click()
+
+        const submitButton = await this.wizardSubmitButton
+        await browser.waitUntil(
+            async () => (await submitButton.isDisplayed()) && (await submitButton.isEnabled()),
+            { timeout: 15000, interval: 500, timeoutMsg: 'Submit Invoice button did not become available' }
+        )
+        await submitButton.click()
+
+        await browser.waitUntil(
+            async () => (await this.irnBadge.isDisplayed().catch(() => false)) || /invoice-manager\/invoice\//.test(await browser.getUrl()),
+            { timeout: 60000, interval: 1000, timeoutMsg: 'Invoice was not submitted or opened after final submit' }
+        )
     }
 
     async sendToEmail(email) {

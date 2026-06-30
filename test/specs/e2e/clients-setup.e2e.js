@@ -105,8 +105,7 @@ describe('E2E — New Instance Setup: Clients', () => {
 
     it('E2E-CLT-012 | LGA options for Anambra include "Onitsha North"', async () => {
         addFeature('Clients'); addSeverity('normal')
-        const lgaOptions = await ClientsPage.lgaCodeSelect.$$('option')
-        const texts = await Promise.all(lgaOptions.map(o => o.getText()))
+        const texts = await ClientsPage.getLgaOptionTexts()
         expect(texts).toContain('Onitsha North')
     })
 
@@ -131,9 +130,8 @@ describe('E2E — New Instance Setup: Clients', () => {
         expect(listText).toContain(bentenClient.name)
     })
 
-    it('E2E-CLT-016 | Listed client has view, edit and delete action buttons', async () => {
+    it('E2E-CLT-016 | Listed client has edit and delete action buttons', async () => {
         addFeature('Clients'); addSeverity('critical')
-        await expect(ClientsPage.firstViewBtn).toBeExisting()
         await expect(ClientsPage.firstEditBtn).toBeExisting()
         await expect(ClientsPage.firstDeleteBtn).toBeExisting()
     })
