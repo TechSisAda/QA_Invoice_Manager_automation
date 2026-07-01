@@ -1,5 +1,5 @@
 const INSTANCE = process.env.INSTANCE_URL || 'https://benten.invoicemanager.ng'
-
+ 
 // UUIDs for each setting's pencil-edit button (data-val attribute)
 const SETTING_IDS = {
     businessName:    '5740b5e6-df3e-4d38-a406-b4c0ba15967a',

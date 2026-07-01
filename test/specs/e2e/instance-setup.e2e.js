@@ -2,7 +2,7 @@ import { addFeature, addSeverity } from '../../helpers/allureHelper.js'
 import LoginPage from '../../pageobjects/login.page.js'
 import SettingsPage from '../../pageobjects/settings.page.js'
 import { bentenSettings } from '../../helpers/testData.js'
-
+ 
 // ─────────────────────────────────────────────────────────────────────────────
 // E2E: New Instance Setup — FIRS Configuration & Business Profile
 //

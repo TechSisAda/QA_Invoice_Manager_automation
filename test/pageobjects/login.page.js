@@ -27,7 +27,7 @@ class LoginPage {
     async open() {
         await browser.url(INSTANCE_BASE + '/login')
     }
-
+ 
     async login(email, password) {
         await this.emailInput.setValue(email)
         await this.passwordInput.setValue(password)
