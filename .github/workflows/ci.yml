@@ -10,10 +10,13 @@ on:
 
 # Shared env vars used by every job
 env:
-  BASE_URL: ${{ secrets.STAGING_URL }}
-  INSTANCE_URL: ${{ secrets.STAGING_URL }}
+  BASE_URL: ${{ secrets.BASE_URL }}
+  INSTANCE_URL: ${{ secrets.INSTANCE_URL }}
   TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
   TEST_PASS: ${{ secrets.TEST_PASS }}
+  TEST_FIRST_NAME: ${{ secrets.TEST_FIRST_NAME }}
+  TEST_LAST_NAME: ${{ secrets.TEST_LAST_NAME }}
+  TEST_PHONE: ${{ secrets.TEST_PHONE }}
   HEADLESS: 'true'
 
 jobs:
