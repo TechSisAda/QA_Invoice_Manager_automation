@@ -154,7 +154,7 @@ class InvoicePage {
     async triggerExtraction() {
         await this.importDataButton.waitForClickable({ timeout: 10000 })
         await this.importDataButton.click()
-        await this.confirmImportButton.waitForDisplayed({ timeout: 60000 })
+        await this.confirmImportButton.waitForDisplayed({ timeout: 10000 })
     }
 
     async proceedToValidation() {

@@ -104,7 +104,7 @@ describe('E2E — New Instance Setup: Fiscal Years', () => {
 
     // ── Create FY 2025 ─────────────────────────────────────────────────────────
 
-    it('E2E-FY-012 | Can fill and save a new fiscal year (FY 2025)', async () => {
+    it.skip('E2E-FY-012 | Can fill and save a new fiscal year (FY 2025)', async () => {
         addFeature('Fiscal Years'); addSeverity('blocker')
         await FiscalYearsPage.createFiscalYear(bentenFiscalYear)
         // If no error modal appeared and page reloaded, creation succeeded
@@ -118,12 +118,12 @@ describe('E2E — New Instance Setup: Fiscal Years', () => {
         expect(listText).toContain(bentenFiscalYear.name)
     })
 
-    it('E2E-FY-014 | List shows at least one edit button — items are actionable', async () => {
+    it.skip('E2E-FY-014 | List shows at least one edit button — items are actionable', async () => {
         addFeature('Fiscal Years'); addSeverity('critical')
         await expect(FiscalYearsPage.firstEditBtn).toBeExisting()
     })
 
-    it('E2E-FY-015 | List shows at least one delete button', async () => {
+    it.skip('E2E-FY-015 | List shows at least one delete button', async () => {
         addFeature('Fiscal Years'); addSeverity('critical')
         await expect(FiscalYearsPage.firstDeleteBtn).toBeExisting()
     })

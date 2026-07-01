@@ -50,11 +50,11 @@ export const bentenSettings = {
 }
 
 export const bentenFiscalYear = {
-    name:       'FY 2025',
+    name:       'FY2025',
     status:     'active',
     isCurrent:  '1',
-    startDate:  '2025-01-01',
-    endDate:    '2025-12-31',
+    startDate:  '01-01-2025',
+    endDate:    '12-31-2025',
 }
 
 export const bentenProduct = {

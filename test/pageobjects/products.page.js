@@ -1,7 +1,7 @@
 const INSTANCE = process.env.INSTANCE_URL || 'https://benten.invoicemanager.ng'
 
 // Card-view component prefix used in all dynamic element IDs
-const CDV = 'Hasob_BizEngine_Models_InventoryItem'
+const PRODUCTS_CDV = 'Hasob_BizEngine_Models_InventoryItem'
 
 class ProductsPage {
 
@@ -20,15 +20,15 @@ class ProductsPage {
     get totalServicesCount()    { return $('.text-pink h4.mb-0') }
 
     // ── List / Card view ──────────────────────────────────────────────────────
-    get searchInput()           { return $(`#${CDV}-txt-search`) }
-    get searchBtn()             { return $(`#${CDV}-btn-search`) }
-    get filterAllBtn()          { return $(`.${CDV}-grp[data-val="All"]`) }
-    get filterProductsBtn()     { return $(`.${CDV}-grp[data-val="Products"]`) }
-    get filterServicesBtn()     { return $(`.${CDV}-grp[data-val="Services"]`) }
-    get cardViewContainer()     { return $(`#${CDV}-div-card-view`) }
-    get listSpinner()           { return $(`#spinner-${CDV}`) }
-    get pagination()            { return $(`#${CDV}-pagination`) }
-    get paginationLimitBtn()    { return $(`#btn-${CDV}-pagination`) }
+    get searchInput()           { return $(`[id$="-${PRODUCTS_CDV}-txt-search"]`) }
+    get searchBtn()             { return $(`[id$="-${PRODUCTS_CDV}-btn-search"]`) }
+    get filterAllBtn()          { return $(`[class*="-${PRODUCTS_CDV}-grp"][data-val="All"]`) }
+    get filterProductsBtn()     { return $(`[class*="-${PRODUCTS_CDV}-grp"][data-val="Products"]`) }
+    get filterServicesBtn()     { return $(`[class*="-${PRODUCTS_CDV}-grp"][data-val="Services"]`) }
+    get cardViewContainer()     { return $(`[id$="-${PRODUCTS_CDV}-div-card-view"]`) }
+    get listSpinner()           { return $(`[id^="spinner-cdv"][id$="-${PRODUCTS_CDV}"]`) }
+    get pagination()            { return $(`[id$="-${PRODUCTS_CDV}-pagination"]`) }
+    get paginationLimitBtn()    { return $(`[id^="btn-cdv_"][id$="-${PRODUCTS_CDV}-pagination"]`) }
 
     // Row-level action buttons (rendered inside the dynamically loaded card HTML)
     get firstEditBtn()          { return $('.btn-edit-mdl-inventoryItem-modal') }
@@ -38,7 +38,7 @@ class ProductsPage {
 
     // ── Create / Edit modal ───────────────────────────────────────────────────
     get modal()                 { return $('#mdl-inventoryItem-modal') }
-    get modalTitle()            { return $('#lbl-inventoryItem-modal-title') }
+    get modalTitle()            { return $('#mdl-inventoryItem-modal #lbl-inventoryItem-modal-title') }
     get modalErrorDiv()         { return $('#div-inventoryItem-modal-error') }
 
     // Form fields
@@ -82,12 +82,21 @@ class ProductsPage {
     }
 
     async openNewModal() {
+        await this.newItemBtn.waitForClickable({ timeout: 10000 })
         await this.newItemBtn.click()
         await this.modal.waitForDisplayed({ timeout: 5000 })
         await browser.waitUntil(
             async () => !(await this.modalSpinner.isDisplayed()),
             { timeout: 5000 }
         )
+    }
+
+    async searchForItem(query) {
+        await this.searchInput.clearValue()
+        await this.searchInput.setValue(query)
+        await this.searchBtn.click()
+        await browser.pause(800)
+        await this.waitForListLoaded()
     }
 
     async closeModal() {
@@ -119,7 +128,7 @@ class ProductsPage {
         }
 
         await this.saveModalBtn.click()
-        // Save triggers a swal "Saving" dialog then reloads on success
+        await this.confirmSwal()
         await this.newItemBtn.waitForDisplayed({ timeout: 20000 })
         await this.waitForListLoaded()
     }

@@ -1,7 +1,7 @@
 const INSTANCE = process.env.INSTANCE_URL || 'https://benten.invoicemanager.ng'
 
-// Card-view component prefix used in all dynamic element IDs
-const CDV = 'Hasob_BizEngine_Models_FiscalYear'
+// The cdv_* prefix changes between deployments; anchor selectors to the stable model/id suffix.
+const FISCAL_YEAR_CDV = 'Hasob_BizEngine_Models_FiscalYear'
 
 class FiscalYearsPage {
 
@@ -14,15 +14,15 @@ class FiscalYearsPage {
     get newFiscalYearBtn()     { return $('#btn-new-mdl-fiscalYear-modal') }
 
     // ── List / Card view ──────────────────────────────────────────────────────
-    get searchInput()          { return $(`#${CDV}-txt-search`) }
-    get searchBtn()            { return $(`#${CDV}-btn-search`) }
-    get filterAllBtn()         { return $(`.${CDV}-grp[data-val="All"]`) }
-    get filterOpenBtn()        { return $(`.${CDV}-grp[data-val="Open"]`) }
-    get filterClosedBtn()      { return $(`.${CDV}-grp[data-val="Closed"]`) }
-    get cardViewContainer()    { return $(`#${CDV}-div-card-view`) }
-    get listSpinner()          { return $(`#spinner-${CDV}`) }
-    get pagination()           { return $(`#${CDV}-pagination`) }
-    get paginationLimitBtn()   { return $(`#btn-${CDV}-pagination`) }
+    get searchInput()          { return $(`[id$="-${FISCAL_YEAR_CDV}-txt-search"]`) }
+    get searchBtn()            { return $(`[id$="-${FISCAL_YEAR_CDV}-btn-search"]`) }
+    get filterAllBtn()         { return $(`[class*="-${FISCAL_YEAR_CDV}-grp"][data-val="All"]`) }
+    get filterOpenBtn()        { return $(`[class*="-${FISCAL_YEAR_CDV}-grp"][data-val="Open"]`) }
+    get filterClosedBtn()      { return $(`[class*="-${FISCAL_YEAR_CDV}-grp"][data-val="Closed"]`) }
+    get cardViewContainer()    { return $(`[id$="-${FISCAL_YEAR_CDV}-div-card-view"]`) }
+    get listSpinner()          { return $(`[id^="spinner-cdv_"][id$="-${FISCAL_YEAR_CDV}"]`) }
+    get pagination()           { return $(`[id$="-${FISCAL_YEAR_CDV}-pagination"]`) }
+    get paginationLimitBtn()   { return $(`[id^="btn-cdv_"][id$="-${FISCAL_YEAR_CDV}-pagination"]`) }
 
     // Row-level action buttons (rendered inside the dynamically loaded card HTML)
     get firstEditBtn()         { return $('.btn-edit-mdl-fiscalYear-modal') }
@@ -62,6 +62,7 @@ class FiscalYearsPage {
             async () => !(await this.listSpinner.isDisplayed()),
             { timeout: 15000, interval: 300 }
         )
+        await this.cardViewContainer.waitForExist({ timeout: 15000 })
     }
 
     async openNewModal() {

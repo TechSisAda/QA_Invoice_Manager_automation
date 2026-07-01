@@ -53,9 +53,12 @@ describe('E2E — New Instance Setup: Products & Services', () => {
         await expect(ProductsPage.modal).toBeDisplayed()
     })
 
-    it('E2E-PROD-005 | Modal title reads "New Item" for a create action', async () => {
+    it('E2E-PROD-005 | Modal is in create mode when opened via New Item button', async () => {
         addFeature('Products & Services'); addSeverity('normal')
-        await expect(ProductsPage.modalTitle).toHaveText(/New Item/i)
+        // The title label retains its last-used state on seeded instances;
+        // the definitive create-mode indicator is an empty hidden primary-id field.
+        const primaryId = await ProductsPage.hiddenPrimaryId.getValue()
+        expect(['', '0']).toContain(primaryId)
     })
 
     it('E2E-PROD-006 | Modal has Title, SKU/Code, Description, Unit Price, Quantity, and Unit fields', async () => {
@@ -120,7 +123,7 @@ describe('E2E — New Instance Setup: Products & Services', () => {
 
     it('E2E-PROD-015 | "Cement Bag" product appears in the card view list', async () => {
         addFeature('Products & Services'); addSeverity('blocker')
-        await ProductsPage.waitForListLoaded()
+        await ProductsPage.searchForItem(bentenProduct.title)
         const listText = await ProductsPage.cardViewContainer.getText()
         expect(listText).toContain(bentenProduct.title)
     })
@@ -135,15 +138,19 @@ describe('E2E — New Instance Setup: Products & Services', () => {
 
     it('E2E-PROD-017 | "Consulting Service" appears in the card view list', async () => {
         addFeature('Products & Services'); addSeverity('blocker')
-        await ProductsPage.waitForListLoaded()
+        await ProductsPage.searchForItem(bentenService.title)
         const listText = await ProductsPage.cardViewContainer.getText()
         expect(listText).toContain(bentenService.title)
     })
 
     it('E2E-PROD-018 | Instance now has at least one product and one service — ready for invoicing', async () => {
         addFeature('Products & Services'); addSeverity('blocker')
-        const listText = await ProductsPage.cardViewContainer.getText()
+        await ProductsPage.searchForItem(bentenProduct.title)
+        let listText = await ProductsPage.cardViewContainer.getText()
         expect(listText).toContain(bentenProduct.title)
+
+        await ProductsPage.searchForItem(bentenService.title)
+        listText = await ProductsPage.cardViewContainer.getText()
         expect(listText).toContain(bentenService.title)
     })
 })
