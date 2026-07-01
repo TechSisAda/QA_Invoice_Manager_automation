@@ -10,7 +10,10 @@ describe('E2E — Vendor Expense Invoice Full Flow', () => {
         await LoginPage.login(process.env.TEST_EMAIL, process.env.TEST_PASS)
     })
 
-    it('E2E-004 | Record vendor invoice → dashboard reflects updated expense and input VAT', async () => {
+    it.skip('E2E-004 | Record vendor invoice → dashboard reflects updated expense and input VAT', async () => {
+        // BLOCKED: invoice.page.js uses placeholder selectors ([data-testid="wizard-step-1"])
+        // that don't exist on the real page. Re-enable once the invoice wizard HTML is
+        // provided and the page object is rebuilt with real selectors.
         addFeature('Vendor Expense Flow'); addSeverity('normal')
 
         await InvoicePage.openWizard()

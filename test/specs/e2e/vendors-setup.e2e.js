@@ -129,9 +129,9 @@ describe('E2E — New Instance Setup: Vendors', () => {
         expect(listText).toContain(bentenVendor.name)
     })
 
-    it('E2E-VND-016 | Listed vendor has view, edit and delete action buttons', async () => {
+    it('E2E-VND-016 | Listed vendor has edit and delete action buttons', async () => {
         addFeature('Vendors'); addSeverity('critical')
-        await expect(VendorsPage.firstViewBtn).toBeExisting()
+        // Vendor CDV renders edit and delete only — no view/show button
         await expect(VendorsPage.firstEditBtn).toBeExisting()
         await expect(VendorsPage.firstDeleteBtn).toBeExisting()
     })

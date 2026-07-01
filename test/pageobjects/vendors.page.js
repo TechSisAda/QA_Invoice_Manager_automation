@@ -30,11 +30,9 @@ class VendorsPage {
     get applyFilterBtn()        { return $(`[id^="btn-save-mdl-cdv_"][id$="-${VENDOR_CDV}-filter-modal"]`) }
     get resetFilterBtn()        { return $(`[id^="btn-reset-mdl-cdv_"][id$="-${VENDOR_CDV}-filter-modal"]`) }
 
-    // Row-level action buttons (rendered inside the dynamically loaded card HTML)
-    get firstViewBtn()          { return $('.btn-show-mdl-vendor-modal') }
+    // Row-level action buttons — Vendor CDV renders edit and delete only (no view button)
     get firstEditBtn()          { return $('.btn-edit-mdl-vendor-modal') }
     get firstDeleteBtn()        { return $('.btn-delete-mdl-vendor-modal') }
-    viewBtnFor(id)              { return $(`.btn-show-mdl-vendor-modal[data-val="${id}"]`) }
     editBtnFor(id)              { return $(`.btn-edit-mdl-vendor-modal[data-val="${id}"]`) }
     deleteBtnFor(id)            { return $(`.btn-delete-mdl-vendor-modal[data-val="${id}"]`) }
 
@@ -87,12 +85,22 @@ class VendorsPage {
             { timeout: 15000, interval: 300 }
         )
         await this.cardViewContainer.waitForExist({ timeout: 15000 })
+        // The CDV spinner stops before the card HTML is injected into the DOM;
+        // a short pause lets the DOM update propagate before callers assert on cards.
+        await browser.pause(600)
     }
 
     async openNewModal() {
+        // Wait for any overlay (sweet-alert, modal backdrop) to clear before clicking
+        await this.newVendorBtn.waitForClickable({ timeout: 10000 })
         await this.newVendorBtn.click()
-        await this.modal.waitForDisplayed({ timeout: 5000 })
-        // New-modal JS hides the spinner immediately; wait to confirm
+        // Wait for Bootstrap .show class — fires AFTER the 300ms fade-in animation
+        // completes, not when the element first appears. Without this, setValue()
+        // starts typing mid-animation and characters are swallowed.
+        await browser.waitUntil(
+            async () => (await this.modal.getAttribute('class') || '').includes('show'),
+            { timeout: 5000, interval: 100 }
+        )
         await browser.waitUntil(
             async () => !(await this.modalSpinner.isDisplayed()),
             { timeout: 5000 }
@@ -113,22 +121,32 @@ class VendorsPage {
         await this.rcNumberInput.setValue(rcNumber)
         await this.telephoneInput.setValue(telephone)
         await this.firsTinInput.setValue(firsTin)
+
         if (irrNumber) await this.irrNumberInput.setValue(irrNumber)
         if (website)   await this.websiteInput.setValue(website)
         if (addressStreet) await this.addressStreetInput.setValue(addressStreet)
         if (addressTown)   await this.addressTownInput.setValue(addressTown)
         if (addressState) {
             await this.addressStateSelect.selectByAttribute('value', addressState)
-            // LGA list populates dynamically via .address_state change handler
-            await browser.pause(500)
+            // LGA list populates dynamically via .address_state change handler;
+            // wait 1s (not 500ms) — the state AJAX briefly overlays the modal
+            await browser.pause(1000)
         }
         if (lgaCode) {
+            // Scroll the select into view before selecting to avoid click-intercepted
+            await this.lgaCodeSelect.scrollIntoView()
+            await this.lgaCodeSelect.waitForClickable({ timeout: 5000 })
             await this.lgaCodeSelect.selectByVisibleText(lgaCode)
         }
         if (postalCode) await this.postalCodeInput.setValue(postalCode)
 
         await this.saveModalBtn.click()
-        // Save triggers a swal dialog then reloads on success
+        // Vendor save shows a SweetAlert that must be confirmed
+        await this.confirmSwal()
+        // Vendor save refreshes the CDV in-place (no full page reload).
+        // Do an explicit reload so the CDV is fully initialised before callers
+        // try to interact with buttons or the search input.
+        await browser.url(INSTANCE + '/be/vendors')
         await this.newVendorBtn.waitForDisplayed({ timeout: 20000 })
         await this.waitForListLoaded()
     }

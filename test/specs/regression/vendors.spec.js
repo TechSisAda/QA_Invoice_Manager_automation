@@ -134,12 +134,7 @@ describe('REGRESSION — Vendors', () => {
         expect(listText).toContain(bentenVendor.name)
     })
 
-    it('REG-VND-019 | Listed vendors have view buttons', async () => {
-        addFeature('Vendors'); addSeverity('critical')
-        await expect(VendorsPage.firstViewBtn).toBeExisting()
-    })
-
-    it('REG-VND-020 | Listed vendors have edit buttons', async () => {
+    it('REG-VND-019 | Listed vendors have edit buttons', async () => {
         addFeature('Vendors'); addSeverity('critical')
         await expect(VendorsPage.firstEditBtn).toBeExisting()
     })
@@ -297,38 +292,8 @@ describe('REGRESSION — Vendors', () => {
         await expect(VendorsPage.modal).not.toBeDisplayed()
     })
 
-    // ── View Modal ─────────────────────────────────────────────────────────────
-
-    it('REG-VND-042 | Clicking view on the first vendor opens the modal in view mode', async () => {
-        addFeature('Vendors'); addSeverity('critical')
-        await VendorsPage.firstViewBtn.click()
-        await VendorsPage.modal.waitForDisplayed({ timeout: 5000 })
-        await browser.waitUntil(
-            async () => !(await VendorsPage.modalSpinner.isDisplayed()),
-            { timeout: 10000, interval: 300 }
-        )
-        await expect(VendorsPage.modal).toBeDisplayed()
-    })
-
-    it('REG-VND-043 | View modal shows email span with a value', async () => {
-        addFeature('Vendors'); addSeverity('critical')
-        const text = await VendorsPage.viewEmail.getText()
-        expect(text.trim().length).toBeGreaterThan(0)
-    })
-
-    it('REG-VND-044 | View modal shows telephone span with a value', async () => {
-        addFeature('Vendors'); addSeverity('normal')
-        const text = await VendorsPage.viewTelephone.getText()
-        expect(text.trim().length).toBeGreaterThan(0)
-    })
-
-    it('REG-VND-045 | Closing view modal dismisses it', async () => {
-        addFeature('Vendors'); addSeverity('critical')
-        await VendorsPage.closeModal()
-        await expect(VendorsPage.modal).not.toBeDisplayed()
-    })
-
     // ── Edit Modal ─────────────────────────────────────────────────────────────
+    // NOTE: Vendor CDV does not render a view/show button — only edit and delete.
 
     it('REG-VND-046 | Clicking edit on the first vendor opens the modal in edit mode', async () => {
         addFeature('Vendors'); addSeverity('critical')
