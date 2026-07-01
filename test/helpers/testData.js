@@ -113,6 +113,29 @@ export const bentenClient = {
     postalCode:    '435101',
 }
 
+export const bentenVendor = {
+    name:          'Beta Supplies Ltd',
+    email:         'info@betasupplies.ng',
+    rcNumber:      'RC-654321',
+    telephone:     '08098765432',
+    firsTin:       '87654321-0001',
+    irrNumber:     '',
+    website:       'https://betasupplies.ng',
+    addressStreet: '5 Commerce Road',
+    addressTown:   'Awka',
+    addressState:  'NG-AN',
+    lgaCode:       'Awka South',
+    postalCode:    '420001',
+}
+
+export const regVendor = {
+    name:      'REG Test Vendor Ltd',
+    email:     'reg-vendor@regtest.ng',
+    rcNumber:  'RC-888888',
+    telephone: '08011112222',
+    firsTin:   '99999998-0001',
+}
+
 export const testData = {
     validTIN:       '12345678-0001',
     clientTIN:      '87654321-0001',

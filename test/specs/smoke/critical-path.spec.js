@@ -9,7 +9,8 @@ import SettingsPage from '../../pageobjects/settings.page.js'
 import FiscalYearsPage from '../../pageobjects/fiscal-years.page.js'
 import ProductsPage from '../../pageobjects/products.page.js'
 import ClientsPage from '../../pageobjects/clients.page.js'
-import { bentenClient } from '../../helpers/testData.js'
+import VendorsPage from '../../pageobjects/vendors.page.js'
+import { bentenClient, bentenVendor } from '../../helpers/testData.js'
 
 describe('SMOKE — InvoiceManager Landing Page Critical Path', () => {
 
@@ -368,6 +369,46 @@ describe('SMOKE — Clients Critical Path (benten.invoicemanager.ng/be/clients)'
     it('SM-045 | At least one client is listed (instance has a seeded client)', async () => {
         addFeature('Clients'); addSeverity('blocker')
         const listText = await ClientsPage.cardViewContainer.getText()
+        expect(listText).not.toContain('No results found')
+        expect(listText.trim().length).toBeGreaterThan(0)
+    })
+})
+
+describe('SMOKE — Vendors Critical Path (benten.invoicemanager.ng/be/vendors)', () => {
+
+    before(async () => {
+        await LoginPage.open()
+        await LoginPage.login(process.env.TEST_EMAIL, process.env.TEST_PASS)
+        await VendorsPage.open()
+        await VendorsPage.waitForListLoaded()
+    })
+
+    it('SM-046 | Vendor Management page loads with correct title after login', async () => {
+        addFeature('Vendors'); addSeverity('blocker')
+        await expect(browser).toHaveTitle(/InvoiceManager/i)
+        await expect(browser).toHaveTitle(/Vendor/i)
+    })
+
+    it('SM-047 | New Vendor button is present and enabled', async () => {
+        addFeature('Vendors'); addSeverity('blocker')
+        await expect(VendorsPage.newVendorBtn).toBeDisplayed()
+        await expect(VendorsPage.newVendorBtn).not.toBeDisabled()
+    })
+
+    it('SM-048 | Search input and filter button are present', async () => {
+        addFeature('Vendors'); addSeverity('critical')
+        await expect(VendorsPage.searchInput).toBeDisplayed()
+        await expect(VendorsPage.filterBtn).toBeDisplayed()
+    })
+
+    it('SM-049 | Card view container is present and list has loaded', async () => {
+        addFeature('Vendors'); addSeverity('blocker')
+        await expect(VendorsPage.cardViewContainer).toBeExisting()
+    })
+
+    it('SM-050 | At least one vendor is listed (instance has a seeded vendor)', async () => {
+        addFeature('Vendors'); addSeverity('blocker')
+        const listText = await VendorsPage.cardViewContainer.getText()
         expect(listText).not.toContain('No results found')
         expect(listText.trim().length).toBeGreaterThan(0)
     })
